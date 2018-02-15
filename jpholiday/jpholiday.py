@@ -2,6 +2,7 @@
 
 import datetime
 import math
+import calendar
 
 def is_holiday_name(date):
 	"""
@@ -71,7 +72,7 @@ def is_holiday_name(date):
 			name = '敬老の日'
 		elif date.year >= 2003 and date.day == _week_day(date, 3, 1).day:
 			name = '敬老の日'
-		elif _week_day(date, 3, 1).day - _autumn_equinox_day(date.year) == -2 and date.day == _week_day(date, 3, 2).day:
+		elif _week_day(date, 3, 1).day == _autumn_equinox_day(date.year) -2 and date.day == (_week_day(date, 3, 1).day + 1):
 			name = '国民の休日'
 		elif date.day == _autumn_equinox_day(date.year):
 			name = '秋分の日'
@@ -236,7 +237,13 @@ def _week_day(date, week, weekday):
 	if weekday < 1 or weekday > 7:
 		return None
 
-	diff_weekday = date.replace(day=1).isoweekday() - weekday
-	result_date = date.replace(day=1) + datetime.timedelta(days=7 * week - diff_weekday)
+	lines = calendar.monthcalendar(date.year, date.month)
 
-	return result_date
+	days = []
+	for line in lines:
+		if line[weekday-1] == 0:
+			continue
+
+		days.append(line[weekday-1])
+
+	return datetime.date(date.year, date.month, days[week-1])
