@@ -5,4 +5,4 @@ from .jpholiday import *
 2016年 山の日対応
 """
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
