@@ -8,6 +8,65 @@ def is_holiday_name(date):
 	"""
 	その日の祝日名を返します。
 	"""
+	return _holiday_name(date)
+
+def is_holiday(date):
+	"""
+	その日が祝日かどうかを返します。
+	"""
+	name = _holiday_name(date)
+	if name is None:
+		return False
+
+	return True
+
+def year_holidays(year):
+	"""
+	その年の祝日日、祝日名を返します。
+	"""
+	date = datetime.date(year, 1, 1)
+
+	output = []
+	while date.year == year:
+		name = _holiday_name(date)
+		if name is not None:
+			output.append((date, name))
+
+		date = date + datetime.timedelta(days=1)
+
+	return output
+
+def month_holidays(year, month):
+	"""
+	その月の祝日日、祝日名を返します。
+	"""
+	date = datetime.date(year, month, 1)
+
+	output = []
+	while date.month == month:
+		name = _holiday_name(date)
+		if name is not None:
+			output.append((date, name))
+
+		date = date + datetime.timedelta(days=1)
+
+	return output
+
+def holidays(start_date, end_date):
+	"""
+	指定された期間の祝日日、祝日名を返します。
+	"""
+	output = []
+	while start_date <= end_date:
+		name = _holiday_name(start_date)
+		if name is not None:
+			output.append((start_date, name))
+
+		start_date = start_date + datetime.timedelta(days=1)
+
+	return output
+
+def _holiday_name(date, search_national_holiday=True):
 	if date < datetime.date(1948, 7, 20):
 		return None
 	else:
@@ -58,12 +117,15 @@ def is_holiday_name(date):
 	elif date.month == 7:
 		if date.year >= 1996 and date.year <= 2002 and date.day == 20:
 			name = '海の日'
-		elif date.year >= 2003 and date.day == _week_day(date, 3, 1).day:
+		# 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
+		elif date.year >= 2003 and date.year != 2020 and date.day == _week_day(date, 3, 1).day:
 			name = '海の日'
 
 	# 8月
 	elif date.month == 8:
-		if date.year >= 2016 and date.day == 11:
+		# 2016: 国民の祝日に関する法律の一部を改正する法律(平成26年法律第43号)
+		# 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
+		if date.year >= 2016 and date.year != 2020 and date.day == 11:
 			name = '山の日'
 
 	# 9月
@@ -72,8 +134,6 @@ def is_holiday_name(date):
 			name = '敬老の日'
 		elif date.year >= 2003 and date.day == _week_day(date, 3, 1).day:
 			name = '敬老の日'
-		elif _week_day(date, 3, 1).day == _autumn_equinox_day(date.year) -2 and date.day == (_week_day(date, 3, 1).day + 1):
-			name = '国民の休日'
 		elif date.day == _autumn_equinox_day(date.year):
 			name = '秋分の日'
 
@@ -81,8 +141,12 @@ def is_holiday_name(date):
 	elif date.month == 10:
 		if date.year >= 1966 and date.year <= 1999 and date.day == 10:
 			name = '体育の日'
-		elif date.year >= 2000 and date.day == _week_day(date, 2, 1).day:
+		elif date.year >= 2003 and date.year <= 2019 and date.day == _week_day(date, 2, 1).day:
 			name = '体育の日'
+		# 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
+		#       国民の祝日に関する法律(昭和23年法律第178号)の特例
+		elif date.year >= 2020 and date.year != 2020 and date.day == _week_day(date, 2, 1).day:
+			name = 'スポーツの日'
 
 	# 11月
 	elif date.month == 11:
@@ -106,70 +170,27 @@ def is_holiday_name(date):
 	elif date == datetime.date(1993, 6, 9):
 		name = '皇太子・皇太子徳仁親王の結婚の儀'
 
+	# 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
+	if date == datetime.date(2020, 7, 23):
+		name = '海の日'
+	elif date == datetime.date(2020, 7, 24):
+		name = 'スポーツの日'
+	elif date == datetime.date(2020, 8, 10):
+		name = '山の日'
+
 	# 振替休日
 	if name is None and date.isoweekday() == 1:
 		prev_name = _calc_date_holiday_name(date, datetime.timedelta(days=-1))
 		if prev_name is not None:
 			name = prev_name+' 振替休日'
 
+	# 国民の休日
+	if name is None and search_national_holiday == True:
+		if _calc_date_holiday_name(date, datetime.timedelta(days=-1)) is not None\
+			and _calc_date_holiday_name(date, datetime.timedelta(days=1)) is not None:
+			name = '国民の休日'
 
 	return name
-
-def is_holiday(date):
-	"""
-	その日が祝日かどうかを返します。
-	"""
-	name = is_holiday_name(date)
-	if name is None:
-		return False
-
-	return True
-
-def year_holidays(year):
-	"""
-	その年の祝日日、祝日名を返します。
-	"""
-	date = datetime.date(year, 1, 1)
-
-	output = []
-	while date.year == year:
-		name = is_holiday_name(date)
-		if name is not None:
-			output.append((date, name))
-
-		date = date + datetime.timedelta(days=1)
-
-	return output
-
-def month_holidays(year, month):
-	"""
-	その月の祝日日、祝日名を返します。
-	"""
-	date = datetime.date(year, month, 1)
-
-	output = []
-	while date.month == month:
-		name = is_holiday_name(date)
-		if name is not None:
-			output.append((date, name))
-
-		date = date + datetime.timedelta(days=1)
-
-	return output
-
-def holidays(start_date, end_date):
-	"""
-	指定された期間の祝日日、祝日名を返します。
-	"""
-	output = []
-	while start_date <= end_date:
-		name = is_holiday_name(start_date)
-		if name is not None:
-			output.append((start_date, name))
-
-		start_date = start_date + datetime.timedelta(days=1)
-
-	return output
 
 def _vernal_equinox_day(year):
 	"""
@@ -223,9 +244,9 @@ def _calc_date_holiday_name(date, timedelta):
 	"""
 	日付計算後その日付の祝日名を返します。
     """
-	old = date + timedelta
-	old_name = is_holiday_name(old)
-	return old_name
+	new_date = date + timedelta
+	new_date_name = _holiday_name(new_date, False)
+	return new_date_name
 
 def _week_day(date, week, weekday):
 	"""
