@@ -81,7 +81,7 @@ def is_holiday_name(date):
 	elif date.month == 10:
 		if date.year >= 1966 and date.year <= 1999 and date.day == 10:
 			name = '体育の日'
-		elif date.year >= 2003 and date.day == _week_day(date, 2, 1).day:
+		elif date.year >= 2000 and date.day == _week_day(date, 2, 1).day:
 			name = '体育の日'
 
 	# 11月
