@@ -11,6 +11,8 @@ class TestYear2020(unittest.TestCase):
 		self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 1, 1)), '元日')
 		self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 1, 13)), '成人の日')
 		self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 11)), '建国記念の日')
+		self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 23)), '天皇誕生日')
+		self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 24)), '天皇誕生日 振替休日')
 		self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 3, 20)), '春分の日')
 		self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 4, 29)), '昭和の日')
 		self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 5, 3)), '憲法記念日')
@@ -30,7 +32,7 @@ class TestYear2020(unittest.TestCase):
 		2020年月祝日数
 		"""
 		self.assertEqual(len(jpholiday.month_holidays(2020, 1)), 2)
-		self.assertEqual(len(jpholiday.month_holidays(2020, 2)), 1)
+		self.assertEqual(len(jpholiday.month_holidays(2020, 2)), 3)
 		self.assertEqual(len(jpholiday.month_holidays(2020, 3)), 1)
 		self.assertEqual(len(jpholiday.month_holidays(2020, 4)), 1)
 		self.assertEqual(len(jpholiday.month_holidays(2020, 5)), 4)
@@ -46,4 +48,4 @@ class TestYear2020(unittest.TestCase):
 		"""
 		2020年祝日数
 		"""
-		self.assertEqual(len(jpholiday.year_holidays(2020)), 16)
+		self.assertEqual(len(jpholiday.year_holidays(2020)), 18)

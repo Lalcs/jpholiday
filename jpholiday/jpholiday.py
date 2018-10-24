@@ -85,6 +85,10 @@ def _holiday_name(date, search_national_holiday=True):
 	elif date.month == 2:
 		if date.year >= 1967 and date.day == 11:
 			name = '建国記念の日'
+		# 2019: 国民の祝日に関する法律(昭和23年法律第178号)の一部改正
+		elif date.year >= 2020 and date.day == 23:
+			name = '天皇誕生日'
+
 
 	# 3月
 	elif date.month == 3:
@@ -157,7 +161,8 @@ def _holiday_name(date, search_national_holiday=True):
 
 	# 12月
 	elif date.month == 12:
-		if date.day == 23:
+		# 2019: 国民の祝日に関する法律(昭和23年法律第178号)の一部改正
+		if date.year <= 2018 and date.day == 23:
 			name = '天皇誕生日'
 
 	# 皇室慶弔行事に伴う祝日
