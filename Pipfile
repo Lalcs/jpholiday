@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 
 [dev-packages]
+twine = "*"
+wheel = "*"
 
 [requires]
 python_version = "3.7"
