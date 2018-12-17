@@ -1,6 +1,15 @@
 JPHoliday
 ====================================================
 
+.. image:: https://img.shields.io/pypi/v/jpholiday.svg
+ :target: https://pypi.org/project/jpholiday/
+.. image:: https://img.shields.io/pypi/l/jpholiday.svg
+ :target: https://pypi.org/project/jpholiday/
+.. image:: https://img.shields.io/pypi/pyversions/jpholiday.svg
+ :target: https://pypi.org/project/jpholiday/
+.. image:: https://img.shields.io/github/contributors/lalcs/jpholiday.svg
+ :target: https://github.com/lalcs/jpholiday/graphs/contributors
+
 日本の祝日を取得するライブラリ
 
 Installation
