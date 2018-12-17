@@ -166,6 +166,7 @@ def _holiday_name(date, search_national_holiday=True):
 			name = '天皇誕生日'
 
 	# 皇室慶弔行事に伴う祝日
+	# 2019: 天皇の即位の日及び即位礼正殿の儀の行われる日を休日とする法律
 	if date == datetime.date(1959, 4, 10):
 		name = '皇太子・明仁親王の結婚の儀'
 	elif date == datetime.date(1989, 2, 24):
@@ -174,6 +175,10 @@ def _holiday_name(date, search_national_holiday=True):
 		name = '即位の礼正殿の儀'
 	elif date == datetime.date(1993, 6, 9):
 		name = '皇太子・皇太子徳仁親王の結婚の儀'
+	elif date == datetime.date(2019, 5, 1):
+		name = '天皇の即位の日'
+	elif date == datetime.date(2019, 10, 22):
+		name = '即位礼正殿の儀'
 
 	# 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
 	if date == datetime.date(2020, 7, 23):
