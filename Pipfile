@@ -8,9 +8,10 @@ name = "pypi"
 [dev-packages]
 twine = "*"
 wheel = "*"
+coverage = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.7.1"
 
 [scripts]
 build = "python setup.py sdist bdist_wheel"
