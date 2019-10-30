@@ -28,7 +28,6 @@ class TestYear1971(unittest.TestCase):
         """
         1971年月祝日数
         """
-        print(jpholiday.year_holidays(1971))
         self.assertEqual(len(jpholiday.month_holidays(1971, 1)), 2)
         self.assertEqual(len(jpholiday.month_holidays(1971, 2)), 1)
         self.assertEqual(len(jpholiday.month_holidays(1971, 3)), 1)
