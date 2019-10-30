@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import datetime
 
 
 class RegistryHolder(type):
@@ -21,6 +20,7 @@ class RegistryHolder(type):
     @classmethod
     def get_registry(cls):
         return list(cls._REGISTRY)
+
 
 class BaseHoliday(metaclass=RegistryHolder):
     _HOLIDAY_NAME = ''

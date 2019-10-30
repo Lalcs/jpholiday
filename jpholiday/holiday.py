@@ -300,6 +300,10 @@ class TransferHoliday(registry.BaseHoliday):
 
     def _check_holiday(self, date):
 
+        # 1973年(昭和48年)4月12日 - 改正・施行
+        if date.year < 1973:
+            return False
+
         if date.month == 5 and date.day == 6 and date.isoweekday() in (2, 3):
             for holiday in registry.RegistryHolder.get_registry():
                 if holiday.__class__.__name__ == self.__class__.__name__:
