@@ -331,7 +331,10 @@ class TransferHoliday(registry.BaseHoliday):
         if date.month == 5 and date.day == 6 and date.isoweekday() in (2, 3):
             for holiday in registry.RegistryHolder.get_registry():
                 if holiday.__class__.__name__ == self.__class__.__name__:
-                    return None
+                    continue
+
+                if isinstance(holiday, registry.OriginalHoliday):
+                    continue
 
                 if holiday.is_holiday((date + datetime.timedelta(days=-date.isoweekday()))):
                     return '{} {}'.format(
@@ -345,7 +348,10 @@ class TransferHoliday(registry.BaseHoliday):
         # GW以外
         for holiday in registry.RegistryHolder.get_registry():
             if holiday.__class__.__name__ == self.__class__.__name__:
-                return None
+                continue
+
+            if isinstance(holiday, registry.OriginalHoliday):
+                continue
 
             if holiday.is_holiday((date + datetime.timedelta(days=-1))):
                 return '{} {}'.format(holiday.is_holiday_name((date + datetime.timedelta(days=-1))),
@@ -363,7 +369,10 @@ class TransferHoliday(registry.BaseHoliday):
 
         for holiday in registry.RegistryHolder.get_registry():
             if holiday.__class__.__name__ == self.__class__.__name__:
-                return False
+                continue
+
+            if isinstance(holiday, registry.OriginalHoliday):
+                continue
 
             if holiday.is_holiday((date + datetime.timedelta(days=-1))):
                 result['old'] = True

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from .jpholiday import *
-from .registry import BaseHoliday
+from .registry import OriginalHoliday
 
 """
 日本の祝日を扱うクラス
@@ -11,4 +11,4 @@ from .registry import BaseHoliday
 2019年 天皇の即位の日及び即位礼正殿の儀の行われる日を休日とする法律
 """
 
-__version__ = '0.0.6'
+__version__ = '0.1.0'

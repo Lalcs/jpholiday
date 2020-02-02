@@ -12,6 +12,32 @@ class TestBasic(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def test_original_holiday(self):
+        """
+        独自の休み
+        """
+        class TestHoliday(jpholiday.registry.OriginalHoliday):
+            def _is_holiday(self, date):
+                if date == datetime.date(2020, 2, 3) or date == datetime.date(2020, 2, 5):
+                    return True
+                if date == datetime.date(2020, 2, 9):
+                    return True
+                return False
+
+            def _is_holiday_name(self, date):
+                return '特別休暇'
+
+        # 国民の休日
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 3)), '特別休暇')
+        self.assertEqual(jpholiday.is_holiday(datetime.date(2020, 2, 4)), False)
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 5)), '特別休暇')
+
+        # 振替休日
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 9)), '特別休暇')
+        self.assertEqual(jpholiday.is_holiday(datetime.date(2020, 2, 10)), False)
+
+        jpholiday.registry.OriginalHoliday.unregister(TestHoliday)
+
     def test_vernal_equinox_day(self):
         """
         春分の日
