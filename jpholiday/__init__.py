@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from .jpholiday import *
+from .registry import BaseHoliday
 
 """
 日本の祝日を扱うクラス
