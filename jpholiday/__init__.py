@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from .jpholiday import *
+from .registry import OriginalHoliday
+
 """
 日本の祝日を扱うクラス
 2016年 国民の祝日に関する法律の一部を改正する法律(平成26年法律第43号)
@@ -9,4 +11,4 @@ from .jpholiday import *
 2019年 天皇の即位の日及び即位礼正殿の儀の行われる日を休日とする法律
 """
 
-__version__ = '0.0.7'
+__version__ = '0.1.0'
