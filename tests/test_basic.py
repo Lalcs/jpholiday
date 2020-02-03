@@ -3,8 +3,6 @@ import datetime
 import unittest
 
 import jpholiday
-import jpholiday.holiday
-
 
 class TestBasic(unittest.TestCase):
 
