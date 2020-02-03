@@ -14,7 +14,7 @@ class TestBasic(unittest.TestCase):
         """
         独自の休み
         """
-        class TestHoliday(jpholiday.registry.OriginalHoliday):
+        class TestHoliday(jpholiday.OriginalHoliday):
             def _is_holiday(self, date):
                 if date == datetime.date(2020, 2, 3) or date == datetime.date(2020, 2, 5):
                     return True
@@ -34,7 +34,23 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 9)), '特別休暇')
         self.assertEqual(jpholiday.is_holiday(datetime.date(2020, 2, 10)), False)
 
-        jpholiday.registry.OriginalHoliday.unregister(TestHoliday)
+        # 登録解除
+        jpholiday.OriginalHoliday.unregister(TestHoliday)
+
+        # 再登録
+        jpholiday.OriginalHoliday.register(TestHoliday)
+
+        # 国民の休日
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 3)), '特別休暇')
+        self.assertEqual(jpholiday.is_holiday(datetime.date(2020, 2, 4)), False)
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 5)), '特別休暇')
+
+        # 振替休日
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 9)), '特別休暇')
+        self.assertEqual(jpholiday.is_holiday(datetime.date(2020, 2, 10)), False)
+
+        # 登録解除
+        jpholiday.OriginalHoliday.unregister(TestHoliday)
 
     def test_vernal_equinox_day(self):
         """

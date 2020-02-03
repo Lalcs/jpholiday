@@ -6,9 +6,7 @@ class RegistryHolder(type):
     def __new__(cls, name, bases, attrs):
         new_cls = type.__new__(cls, name, bases, attrs)
 
-        instance = new_cls()
-
-        cls.register(instance)
+        cls.register(new_cls)
 
         return new_cls
 
@@ -18,7 +16,8 @@ class RegistryHolder(type):
 
     @classmethod
     def register(cls, register_class):
-        cls._REGISTRY.append(register_class)
+        instance = register_class()
+        cls._REGISTRY.append(instance)
 
     @classmethod
     def unregister(cls, register_class):
