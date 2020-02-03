@@ -3,6 +3,7 @@
 import datetime
 
 from . import registry
+from . import holiday
 
 
 def is_holiday_name(date):
