@@ -333,6 +333,9 @@ class TransferHoliday(registry.BaseHoliday):
                 if holiday.__class__.__name__ == self.__class__.__name__:
                     continue
 
+                if isinstance(holiday, NationalHoliday):
+                    continue
+
                 if isinstance(holiday, registry.OriginalHoliday):
                     continue
 
@@ -350,6 +353,9 @@ class TransferHoliday(registry.BaseHoliday):
             if holiday.__class__.__name__ == self.__class__.__name__:
                 continue
 
+            if isinstance(holiday, NationalHoliday):
+                continue
+
             if isinstance(holiday, registry.OriginalHoliday):
                 continue
 
@@ -359,7 +365,7 @@ class TransferHoliday(registry.BaseHoliday):
 
 
 # 国民の休日
-class TransferHoliday(registry.BaseHoliday):
+class NationalHoliday(registry.BaseHoliday):
     def _is_holiday(self, date):
 
         result = {
