@@ -17,6 +17,5 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      # 現在のPythonのバージョンを出力して、マトリックスのテストができる
-      - name: Display Python version
-        run: pwd
+      - name: Run Unittest
+        run: python -m unittest
