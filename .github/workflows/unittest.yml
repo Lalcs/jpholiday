@@ -1,19 +1,22 @@
-name: Unittest
+name: Python package
+
 on: [push]
+
 jobs:
   build:
+
     runs-on: ubuntu-latest
     strategy:
+      # python-version内のPyPyのバージョンが利用できる。 たとえばpypy2とpypy3
       matrix:
         python-version: [2.7, 3.5, 3.6, 3.7, 3.8]
 
-      steps:
-      - name: Check Out Repository
-        uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Test with pytest
-        run: |
-          pwd
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    # 現在のPythonのバージョンを出力して、マトリックスのテストができる
+    - name: Display Python version
+      run: python -c "import sys; print(sys.version)"
