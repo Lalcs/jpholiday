@@ -9,6 +9,7 @@ JPHoliday
  :target: https://pypi.org/project/jpholiday/
 .. image:: https://img.shields.io/github/contributors/lalcs/jpholiday.svg
  :target: https://github.com/lalcs/jpholiday/graphs/contributors
+.. image:: https://github.com/Lalcs/jpholiday/workflows/Unittest/badge.svg
 
 日本の祝日を取得するライブラリ
 
