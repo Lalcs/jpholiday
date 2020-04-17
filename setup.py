@@ -32,7 +32,9 @@ setup(
 		'Programming Language :: Python :: 3.5',
 		'Programming Language :: Python :: 3.6',
 		'Programming Language :: Python :: 3.7',
+		'Programming Language :: Python :: 3.8',
 	],
-	data_files=[('', ['README.rst'])],
-	long_description='{}'.format((open('README.rst', encoding='utf8').read())),
+	data_files=[('', ['README.md'])],
+	long_description='{}'.format((open('README.md', encoding='utf8').read())),
+	long_description_content_type="text/markdown",
 )
