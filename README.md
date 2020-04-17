@@ -17,7 +17,7 @@ pip install jpholiday
 ```
 
 ## Sample Code
-```
+```python
 # 指定日の祝日名を取得
 import jpholiday
 import datetime
