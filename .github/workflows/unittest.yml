@@ -11,11 +11,12 @@ jobs:
         python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: CheckOut Repository
+        uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
       # 現在のPythonのバージョンを出力して、マトリックスのテストができる
       - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
+        run: pwd
