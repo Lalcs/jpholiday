@@ -69,7 +69,7 @@ jpholiday.month_holidays(2017, 5)
 # 指定範囲の祝日を取得
 import jpholiday
 import datetime
-jpholiday.holidays(datetime.date(2017, 1, 1), datetime.date(2017, 5, 3))
+jpholiday.between(datetime.date(2017, 1, 1), datetime.date(2017, 5, 3))
 >[(datetime.date(2017, 1, 1), '元日'),
  (datetime.date(2017, 1, 2), '元日 振替休日'),
  (datetime.date(2017, 1, 9), '成人の日'),

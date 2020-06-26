@@ -21,7 +21,7 @@ class NewYear(registry.BaseHoliday):
 # 成人の日
 class AdultDay(registry.BaseHoliday):
     def _is_holiday(self, date):
-        if date.year <= 1999 and date.month == 1 and date.day == 15:
+        if date.year in range(1948, 1999 + 1) and date.month == 1 and date.day == 15:
             return True
         elif date.year >= 2000 and date.month == 1 and date.day == utils._week_day(date, 2, 1).day:
             return True
@@ -83,13 +83,13 @@ class VernalEquinoxDay(registry.BaseHoliday):
         if year <= 1948:
             return 0
 
-        if year >= 1851 and year <= 1899:
+        if year in range(1851, 1899 + 1):
             i = 19.8277
-        elif year >= 1900 and year <= 1979:
+        elif year in range(1900, 1979 + 1):
             i = 20.8357
-        elif year >= 1980 and year <= 2099:
+        elif year in range(1980, 2099 + 1):
             i = 20.8431
-        elif year >= 2100 and year <= 2150:
+        elif year in range(2100, 1250 + 1):
             i = 21.8510
         else:
             i = 0
@@ -100,7 +100,7 @@ class VernalEquinoxDay(registry.BaseHoliday):
 # みどりの日
 class GreeneryDay(registry.BaseHoliday):
     def _is_holiday(self, date):
-        if date.year >= 1989 and date.year <= 2006 and date.month == 4 and date.day == 29:
+        if date.year in range(1989, 2006 + 1) and date.month == 4 and date.day == 29:
             return True
         elif date.year >= 2007 and date.month == 5 and date.day == 4:
             return True
@@ -146,11 +146,10 @@ class ChildrensDay(registry.BaseHoliday):
 # 海の日
 class SeaDay(registry.BaseHoliday):
     def _is_holiday(self, date):
-        if date.year >= 1996 and date.month == 7 and date.year <= 2002 and date.day == 20:
+        if date.year in range(1996, 2002 + 1) and date.month == 7 and date.day == 20:
             return True
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
-        elif date.year >= 2003 and date.month == 7 and date.year != 2020 and date.day == utils._week_day(date, 3,
-                                                                                                         1).day:
+        elif date.year >= 2003 and date.year != 2020 and date.month == 7 and date.day == utils._week_day(date, 3,1).day:
             return True
 
         # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
@@ -184,7 +183,7 @@ class MountainDay(registry.BaseHoliday):
 # 敬老の日
 class RespectForTheAgedDay(registry.BaseHoliday):
     def _is_holiday(self, date):
-        if date.year >= 1966 and date.year <= 2002 and date.month == 9 and date.day == 15:
+        if date.year in range(1966, 2002 + 1) and date.month == 9 and date.day == 15:
             return True
         elif date.year >= 2003 and date.month == 9 and date.day == utils._week_day(date, 3, 1).day:
             return True
@@ -216,13 +215,13 @@ class AutumnEquinoxDay(registry.BaseHoliday):
         if year <= 1948:
             return 0
 
-        if year >= 1851 and year <= 1899:
+        if year in range(1851, 1899 + 1):
             i = 22.2588
-        elif year >= 1900 and year <= 1979:
+        elif year in range(1900, 1979 + 1):
             i = 23.2588
-        elif year >= 1980 and year <= 2099:
+        elif year in range(1980, 2099 + 1):
             i = 23.2488
-        elif year >= 2100 and year <= 2150:
+        elif year in range(2100, 2150 + 1):
             i = 24.2488
         else:
             i = 0
@@ -233,10 +232,9 @@ class AutumnEquinoxDay(registry.BaseHoliday):
 # 体育の日
 class HealthAndSportsDay(registry.BaseHoliday):
     def _is_holiday(self, date):
-        if date.year >= 1966 and date.year <= 1999 and date.month == 10 and date.day == 10:
+        if date.year in range(1966, 1999 + 1) and date.month == 10 and date.day == 10:
             return True
-        elif date.year >= 2000 and date.year <= 2019 and date.month == 10 and date.day == utils._week_day(date, 2,
-                                                                                                          1).day:
+        elif date.year in range(2000, 2019 + 1) and date.month == 10 and date.day == utils._week_day(date, 2, 1).day:
             return True
         return False
 
@@ -247,6 +245,7 @@ class HealthAndSportsDay(registry.BaseHoliday):
 # スポーツの日
 class SportsDay(registry.BaseHoliday):
     def _is_holiday(self, date):
+
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
         #       国民の祝日に関する法律(昭和23年法律第178号)の特例
         if date.year >= 2020 and date.year != 2020 and date.month == 10 and date.day == utils._week_day(date, 2, 1).day:
@@ -368,10 +367,7 @@ class TransferHoliday(registry.BaseHoliday):
 class NationalHoliday(registry.BaseHoliday):
     def _is_holiday(self, date):
 
-        result = {
-            'old': False,
-            'new': False,
-        }
+        result = [False, False]
 
         for holiday in registry.RegistryHolder.get_registry():
             if holiday.__class__.__name__ == self.__class__.__name__:
@@ -381,11 +377,11 @@ class NationalHoliday(registry.BaseHoliday):
                 continue
 
             if holiday.is_holiday((date + datetime.timedelta(days=-1))):
-                result['old'] = True
+                result[0] = True
             if holiday.is_holiday((date + datetime.timedelta(days=1))):
-                result['new'] = True
+                result[1] = True
 
-            if list(result.values()) == [True, True]:
+            if result == [True, True]:
                 return True
 
         return False
