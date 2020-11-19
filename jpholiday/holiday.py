@@ -328,7 +328,7 @@ class TransferHoliday(registry.BaseHoliday):
             return None
 
         # GW
-        if date.month == 5 and date.day == 6 and date.isoweekday() in (2, 3):
+        if date.year > 2006 and date.month == 5 and date.day == 6 and date.isoweekday() in (2, 3):
             for holiday in registry.RegistryHolder.get_registry():
                 if holiday.__class__.__name__ == self.__class__.__name__:
                     continue
@@ -367,6 +367,9 @@ class TransferHoliday(registry.BaseHoliday):
 # 国民の休日
 class NationalHoliday(registry.BaseHoliday):
     def _is_holiday(self, date):
+
+        if date.isoweekday() == 7:
+            return None
 
         result = {
             'old': False,

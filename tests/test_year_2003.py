@@ -16,7 +16,6 @@ class TestYear2003(unittest.TestCase):
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2003, 3, 21)), '春分の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2003, 4, 29)), 'みどりの日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2003, 5, 3)), '憲法記念日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2003, 5, 4)), '国民の休日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2003, 5, 5)), 'こどもの日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2003, 7, 21)), '海の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2003, 9, 15)), '敬老の日')
@@ -35,7 +34,7 @@ class TestYear2003(unittest.TestCase):
         self.assertEqual(len(jpholiday.month_holidays(2003, 2)), 1)
         self.assertEqual(len(jpholiday.month_holidays(2003, 3)), 1)
         self.assertEqual(len(jpholiday.month_holidays(2003, 4)), 1)
-        self.assertEqual(len(jpholiday.month_holidays(2003, 5)), 3)
+        self.assertEqual(len(jpholiday.month_holidays(2003, 5)), 2)
         self.assertEqual(len(jpholiday.month_holidays(2003, 6)), 0)
         self.assertEqual(len(jpholiday.month_holidays(2003, 7)), 1)
         self.assertEqual(len(jpholiday.month_holidays(2003, 8)), 0)
@@ -48,4 +47,4 @@ class TestYear2003(unittest.TestCase):
         """
         2003年祝日数
         """
-        self.assertEqual(len(jpholiday.year_holidays(2003)), 16)
+        self.assertEqual(len(jpholiday.year_holidays(2003)), 15)
