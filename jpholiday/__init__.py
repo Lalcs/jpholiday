@@ -11,4 +11,4 @@ from .registry import OriginalHoliday
 2019年 天皇の即位の日及び即位礼正殿の儀の行われる日を休日とする法律
 """
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
