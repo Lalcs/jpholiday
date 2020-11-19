@@ -19,11 +19,12 @@ class TestYear2021(unittest.TestCase):
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 5, 3)), '憲法記念日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 5, 4)), 'みどりの日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 5, 5)), 'こどもの日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 7, 19)), '海の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 8, 11)), '山の日')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 7, 22)), '海の日')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 7, 23)), 'スポーツの日')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 8, 8)), '山の日')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 8, 9)), '山の日 振替休日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 9, 20)), '敬老の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 9, 23)), '秋分の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 10, 11)), 'スポーツの日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 11, 3)), '文化の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2021, 11, 23)), '勤労感謝の日')
 
@@ -37,10 +38,10 @@ class TestYear2021(unittest.TestCase):
         self.assertEqual(len(jpholiday.month_holidays(2021, 4)), 1)
         self.assertEqual(len(jpholiday.month_holidays(2021, 5)), 3)
         self.assertEqual(len(jpholiday.month_holidays(2021, 6)), 0)
-        self.assertEqual(len(jpholiday.month_holidays(2021, 7)), 1)
-        self.assertEqual(len(jpholiday.month_holidays(2021, 8)), 1)
+        self.assertEqual(len(jpholiday.month_holidays(2021, 7)), 2)
+        self.assertEqual(len(jpholiday.month_holidays(2021, 8)), 2)
         self.assertEqual(len(jpholiday.month_holidays(2021, 9)), 2)
-        self.assertEqual(len(jpholiday.month_holidays(2021, 10)), 1)
+        self.assertEqual(len(jpholiday.month_holidays(2021, 10)), 0)
         self.assertEqual(len(jpholiday.month_holidays(2021, 11)), 2)
         self.assertEqual(len(jpholiday.month_holidays(2021, 12)), 0)
 
@@ -48,4 +49,4 @@ class TestYear2021(unittest.TestCase):
         """
         2021年祝日数
         """
-        self.assertEqual(len(jpholiday.year_holidays(2021)), 16)
+        self.assertEqual(len(jpholiday.year_holidays(2021)), 17)

@@ -146,16 +146,27 @@ class ChildrensDay(registry.BaseHoliday):
 # 海の日
 class SeaDay(registry.BaseHoliday):
     def _is_holiday(self, date):
+        # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
+        if date.year == 2020:
+            if date == datetime.date(2020, 7, 23):
+                return True
+
+            return False
+
+        # 2021: 五輪特別措置法改正案
+        if date.year == 2021:
+            if date == datetime.date(2021, 7, 22):
+                return True
+
+            return False
+
         if date.year >= 1996 and date.month == 7 and date.year <= 2002 and date.day == 20:
             return True
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
-        elif date.year >= 2003 and date.month == 7 and date.year != 2020 and date.day == utils._week_day(date, 3,
+        elif date.year >= 2003 and date.month == 7 and date.day == utils._week_day(date, 3,
                                                                                                          1).day:
             return True
 
-        # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
-        if date == datetime.date(2020, 7, 23):
-            return True
 
         return False
 
@@ -166,13 +177,23 @@ class SeaDay(registry.BaseHoliday):
 # 山の日
 class MountainDay(registry.BaseHoliday):
     def _is_holiday(self, date):
+        # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
+        if date.year == 2020:
+            if date == datetime.date(2020, 8, 10):
+                return True
+
+            return False
+
+        # 2021: 五輪特別措置法改正案
+        if date.year == 2021:
+            if date == datetime.date(2021, 8, 8):
+                return True
+
+            return False
+
         # 2016: 国民の祝日に関する法律の一部を改正する法律(平成26年法律第43号)
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
-        if date.year >= 2016 and date.year != 2020 and date.month == 8 and date.day == 11:
-            return True
-
-        # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
-        if date == datetime.date(2020, 8, 10):
+        if date.year >= 2016 and date.month == 8 and date.day == 11:
             return True
 
         return False
@@ -247,13 +268,23 @@ class HealthAndSportsDay(registry.BaseHoliday):
 # スポーツの日
 class SportsDay(registry.BaseHoliday):
     def _is_holiday(self, date):
+        # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
+        if date.year == 2020:
+            if date == datetime.date(2020, 7, 24):
+                return True
+
+            return False
+
+        # 2021: 五輪特別措置法改正案
+        if date.year == 2021:
+            if date == datetime.date(2021, 7, 23):
+                return True
+
+            return False
+
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
         #       国民の祝日に関する法律(昭和23年法律第178号)の特例
-        if date.year >= 2020 and date.year != 2020 and date.month == 10 and date.day == utils._week_day(date, 2, 1).day:
-            return True
-
-        # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
-        if date == datetime.date(2020, 7, 24):
+        if date.year >= 2020 and date.month == 10 and date.day == utils._week_day(date, 2, 1).day:
             return True
 
         return False
