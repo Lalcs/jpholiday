@@ -16,4 +16,4 @@ python_version = "3.7"
 [scripts]
 build = "python setup.py sdist bdist_wheel"
 upload = "twine upload dist/*"
-test = "python -m unittest"
+test = "python -m unittest -vvvv"
