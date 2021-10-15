@@ -148,14 +148,14 @@ class SeaDay(registry.BaseHoliday):
     def _is_holiday(self, date):
         # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
         if date.year == 2020:
-            if date == datetime.date(2020, 7, 23):
+            if date.month == 7 and date.day == 23:
                 return True
 
             return False
 
         # 2021: 五輪特別措置法改正案
         if date.year == 2021:
-            if date == datetime.date(2021, 7, 22):
+            if date.month == 7 and date.day == 22:
                 return True
 
             return False
@@ -179,14 +179,14 @@ class MountainDay(registry.BaseHoliday):
     def _is_holiday(self, date):
         # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
         if date.year == 2020:
-            if date == datetime.date(2020, 8, 10):
+            if date.month == 8 and date.day == 10:
                 return True
 
             return False
 
         # 2021: 五輪特別措置法改正案
         if date.year == 2021:
-            if date == datetime.date(2021, 8, 8):
+            if date.month == 8 and date.day == 8:
                 return True
 
             return False
@@ -270,14 +270,14 @@ class SportsDay(registry.BaseHoliday):
     def _is_holiday(self, date):
         # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
         if date.year == 2020:
-            if date == datetime.date(2020, 7, 24):
+            if date.month == 7 and date.day == 24:
                 return True
 
             return False
 
         # 2021: 五輪特別措置法改正案
         if date.year == 2021:
-            if date == datetime.date(2021, 7, 23):
+            if date.month == 7 and date.day == 23:
                 return True
 
             return False
@@ -326,18 +326,18 @@ class ExtraHolidays(registry.BaseHoliday):
         return self.__extra_holiday_name(date)
 
     def __extra_holiday_name(self, date):
-        if date == datetime.date(1959, 4, 10):
+        if date.year == 1959 and date.month == 4 and date.day == 10:
             return '皇太子・明仁親王の結婚の儀'
-        elif date == datetime.date(1989, 2, 24):
+        elif date.year == 1989 and date.month == 2 and date.day == 24:
             return '昭和天皇の大喪の礼'
-        elif date == datetime.date(1990, 11, 12):
+        elif date.year == 1990 and date.month ==11 and date.day == 12:
             return '即位の礼正殿の儀'
-        elif date == datetime.date(1993, 6, 9):
+        elif date.year == 1993 and date.month == 6 and date.day == 9:
             return '皇太子・皇太子徳仁親王の結婚の儀'
-        elif date == datetime.date(2019, 5, 1):
+        elif date.year == 2019 and date.month == 5 and date.day == 1:
             return '天皇の即位の日'
         # 2019: 天皇の即位の日及び即位礼正殿の儀の行われる日を休日とする法律
-        elif date == datetime.date(2019, 10, 22):
+        elif date.year == 2019 and date.month == 10 and date.day == 22:
             return '即位礼正殿の儀'
         return None
 
