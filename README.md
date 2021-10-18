@@ -102,4 +102,38 @@ import jpholiday
 import datetime
 
 jpholiday.OriginalHoliday.unregister(TestHoliday)
+
+# 独自の休日をファイルから読み込む
+import jpholiday
+import configparser
+
+class TestHoliday(jpholiday.OriginalHoliday):
+    original_holidays = {}
+
+    config = configparser.ConfigParser()
+    config.read('holidays.ini')
+    if 'HOLIDAYS' in config:
+        original_holidays = config['HOLIDAYS']
+
+    def _is_holiday(self, date):
+        if date in [datetime.strptime(holiday,'%Y-%m-%d').date() for holiday in self.original_holidays.keys()]:
+            return True
+        return False
+
+    def _is_holiday_name(self, date):
+        if date.strftime('%Y-%m-%d') in self.original_holidays.keys():
+            return self.original_holidays[date.strftime('%Y-%m-%d')]
+        else:
+            return None
+
+'holidays.ini'
+[HOLIDAYS]
+2021-02-22: 特別休暇1
+2021-02-24: 特別休暇2
+
+jpholiday.is_holiday(datetime.date(2021, 2, 22))
+> True
+
+jpholiday.is_holiday_name(datetime.date(2021, 2, 22))
+> 特別休暇1
 ```
