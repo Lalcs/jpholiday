@@ -12,4 +12,4 @@ from .registry import OriginalHoliday
 2020年 五輪特別措置法改正案
 """
 
-__version__ = '0.1.6'
+__version__ = '0.1.7'
