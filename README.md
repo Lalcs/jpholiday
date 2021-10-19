@@ -4,7 +4,7 @@
 [![image](https://img.shields.io/pypi/l/jpholiday.svg)](https://pypi.org/project/jpholiday/)
 [![image](https://img.shields.io/pypi/pyversions/jpholiday.svg)](https://pypi.org/project/jpholiday/)
 [![image](https://img.shields.io/github/contributors/lalcs/jpholiday.svg)](https://github.com/lalcs/jpholiday/graphs/contributors)
-
+[![image](https://img.shields.io/pypi/dm/jpholiday)](https://pypistats.org/packages/jpholiday)
 ![Unittest](https://github.com/Lalcs/jpholiday/workflows/Unittest/badge.svg)
 
 日本の祝日を取得するライブラリ
@@ -17,8 +17,8 @@ pip install jpholiday
 ```
 
 ## Sample Code
+### 指定日の祝日名を取得
 ```python
-# 指定日の祝日名を取得
 import jpholiday
 import datetime
 
