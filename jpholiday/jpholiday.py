@@ -108,8 +108,8 @@ def _to_date(value):
     datetime型をdate型へ変換
     それ以外は例外
     """
-    if type(value) is datetime.date:
-        return value
-    if type(value) is datetime.datetime:
+    if isinstance(value, datetime.datetime):
         return value.date()
+    if isinstance(value, datetime.date):
+        return value
     raise JPHolidayTypeError("is type datetime or date only.")
