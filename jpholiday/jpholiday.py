@@ -112,4 +112,4 @@ def _to_date(value):
         return value.date()
     if isinstance(value, datetime.date):
         return value
-    raise JPHolidayTypeError("is type datetime or date only.")
+    raise JPHolidayTypeError("is type datetime or date isinstance only.")
