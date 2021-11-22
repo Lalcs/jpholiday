@@ -9,6 +9,7 @@ name = "pypi"
 twine = "*"
 wheel = "*"
 coverage = "*"
+freezegun = "*"
 
 [requires]
 python_version = "3.7"
