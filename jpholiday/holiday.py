@@ -357,42 +357,32 @@ class TransferHoliday(registry.BaseHoliday):
         if date.year < 1973:
             return None
 
-        # GW
-        if date.year > 2006 and date.month == 5 and date.day == 6 and date.isoweekday() in (2, 3):
-            for holiday in registry.RegistryHolder.get_registry():
-                if holiday.__class__.__name__ == self.__class__.__name__:
-                    continue
-
-                if isinstance(holiday, NationalHoliday):
-                    continue
-
-                if isinstance(holiday, registry.OriginalHoliday):
-                    continue
-
-                if holiday.is_holiday((date + datetime.timedelta(days=-date.isoweekday()))):
-                    return '{} {}'.format(
-                        holiday.is_holiday_name((date + datetime.timedelta(days=-date.isoweekday()))),
-                        '振替休日')
-
-        # 月曜日でない
-        if date.isoweekday() != 1:
+        # 日曜日に振替休日は存在しない
+        if date.isoweekday() == 7:
             return None
 
-        # GW以外
-        for holiday in registry.RegistryHolder.get_registry():
-            if holiday.__class__.__name__ == self.__class__.__name__:
-                continue
+        filtered_registry = list(filter(lambda x: not isinstance(x, TransferHoliday) and not isinstance(x, NationalHoliday) and not isinstance(x, registry.OriginalHoliday), registry.RegistryHolder.get_registry()))
 
-            if isinstance(holiday, NationalHoliday):
-                continue
+        # 祝日が存在する日に振替休日は存在しない
+        if len(list(filter(lambda x: x.is_holiday(date), filtered_registry))) != 0:
+            return None
 
-            if isinstance(holiday, registry.OriginalHoliday):
-                continue
+        current_date = date - datetime.timedelta(days=1)
+        while(True):
+            current_registry = list(filter(lambda x: x.is_holiday(current_date), filtered_registry))
+            if len(current_registry) == 0:
+                return None
 
-            if holiday.is_holiday((date + datetime.timedelta(days=-1))):
-                return '{} {}'.format(holiday.is_holiday_name((date + datetime.timedelta(days=-1))),
-                                      '振替休日')
+            if current_date.isoweekday() == 7:
+                if len(current_registry) != 0:
+                    return '{} {}'.format(
+                        current_registry[0].is_holiday_name(current_date),
+                        '振替休日'
+                    )
+                else:
+                    return None
 
+            current_date = current_date - datetime.timedelta(days=1)
 
 # 国民の休日
 class NationalHoliday(registry.BaseHoliday):
@@ -401,25 +391,13 @@ class NationalHoliday(registry.BaseHoliday):
         if date.isoweekday() == 7:
             return None
 
-        result = {
-            'old': False,
-            'new': False,
-        }
+        filtered_registry = list(filter(lambda x: not isinstance(x, NationalHoliday) and not isinstance(x, registry.OriginalHoliday), registry.RegistryHolder.get_registry()))
 
-        for holiday in registry.RegistryHolder.get_registry():
-            if holiday.__class__.__name__ == self.__class__.__name__:
-                continue
+        if len(list(filter(lambda x: x.is_holiday(date), filtered_registry))) != 0:
+            return None
 
-            if isinstance(holiday, registry.OriginalHoliday):
-                continue
-
-            if holiday.is_holiday((date + datetime.timedelta(days=-1))):
-                result['old'] = True
-            if holiday.is_holiday((date + datetime.timedelta(days=1))):
-                result['new'] = True
-
-            if list(result.values()) == [True, True]:
-                return True
+        if len(list(filter(lambda x: x.is_holiday(date + datetime.timedelta(days=1)), filtered_registry))) != 0 and len(list(filter(lambda x: x.is_holiday(date - datetime.timedelta(days=1)), filtered_registry))) != 0:
+            return True
 
         return False
 
