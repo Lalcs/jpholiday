@@ -31,6 +31,7 @@ setup(
 		'Programming Language :: Python :: 3.8',
 		'Programming Language :: Python :: 3.9',
 		'Programming Language :: Python :: 3.10',
+		'Programming Language :: Python :: 3.11',
 	],
 	data_files=[('', ['README.md'])],
 	long_description='{}'.format((open('README.md', encoding='utf8').read())),
