@@ -100,7 +100,7 @@ class VernalEquinoxDay(registry.BaseHoliday):
 # みどりの日
 class GreeneryDay(registry.BaseHoliday):
     def _is_holiday(self, date):
-        if date.year >= 1989 and date.year <= 2006 and date.month == 4 and date.day == 29:
+        if date.year in range(1989, 2006 + 1) and date.month == 4 and date.day == 29:
             return True
         elif date.year >= 2007 and date.month == 5 and date.day == 4:
             return True
@@ -160,7 +160,7 @@ class SeaDay(registry.BaseHoliday):
 
             return False
 
-        if date.year >= 1996 and date.month == 7 and date.year <= 2002 and date.day == 20:
+        if date.year in range(1996, 2002 + 1) and date.month == 7 and date.day == 20:
             return True
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
         elif date.year >= 2003 and date.month == 7 and date.day == utils._week_day(date, 3,
@@ -205,7 +205,7 @@ class MountainDay(registry.BaseHoliday):
 # 敬老の日
 class RespectForTheAgedDay(registry.BaseHoliday):
     def _is_holiday(self, date):
-        if date.year >= 1966 and date.year <= 2002 and date.month == 9 and date.day == 15:
+        if date.year in range(1966, 2002 + 1) and date.month == 9 and date.day == 15:
             return True
         elif date.year >= 2003 and date.month == 9 and date.day == utils._week_day(date, 3, 1).day:
             return True
@@ -254,10 +254,9 @@ class AutumnEquinoxDay(registry.BaseHoliday):
 # 体育の日
 class HealthAndSportsDay(registry.BaseHoliday):
     def _is_holiday(self, date):
-        if date.year >= 1966 and date.year <= 1999 and date.month == 10 and date.day == 10:
+        if date.year in range(1966, 1999 + 1) and date.month == 10 and date.day == 10:
             return True
-        elif date.year >= 2000 and date.year <= 2019 and date.month == 10 and date.day == utils._week_day(date, 2,
-                                                                                                          1).day:
+        elif date.year in range(2000, 2019 + 1) and date.month == 10 and date.day == utils._week_day(date, 2, 1).day:
             return True
         return False
 
