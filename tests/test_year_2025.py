@@ -14,7 +14,7 @@ class TestYear2025(unittest.TestCase):
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2025, 1, 13)), '成人の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2025, 2, 11)), '建国記念の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2025, 2, 23)), '天皇誕生日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2025, 2, 23)), '天皇誕生日 振替休日')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2025, 2, 24)), '天皇誕生日 振替休日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2025, 3, 20)), '春分の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2025, 4, 29)), '昭和の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(2025, 5, 3)), '憲法記念日')
