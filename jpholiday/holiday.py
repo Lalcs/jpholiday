@@ -48,9 +48,9 @@ class EmperorsBirthday(registry.BaseHoliday):
         # 1948-1988年
         if date.year in range(1948, 1988 + 1) and date.month == 4 and date.day == 29:
             return True
-        # 1988-2018年
+        # 1989-2018年
         # 2019: 国民の祝日に関する法律(昭和23年法律第178号)の一部改正
-        elif date.year in range(1988, 2018 + 1) and date.month == 12 and date.day == 23:
+        elif date.year in range(1989, 2018 + 1) and date.month == 12 and date.day == 23:
             return True
         # 2019: 国民の祝日に関する法律(昭和23年法律第178号)の一部改正
         elif date.year >= 2020 and date.month == 2 and date.day == 23:
