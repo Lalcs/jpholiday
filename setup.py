@@ -2,7 +2,7 @@ import os
 import re
 from codecs import open
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open(os.path.join('jpholiday', '__init__.py'), 'r', encoding='utf8') as f:
     version = re.compile(
@@ -10,7 +10,7 @@ with open(os.path.join('jpholiday', '__init__.py'), 'r', encoding='utf8') as f:
 
 setup(
     name='jpholiday',
-    packages=['jpholiday'],
+    packages=find_packages(include=['jpholiday', 'jpholiday.*']),
     version=version,
     license='MIT License',
     platforms=['POSIX', 'Windows', 'Unix', 'MacOS'],
