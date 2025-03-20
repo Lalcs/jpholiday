@@ -2,8 +2,8 @@ import datetime
 import warnings
 from typing import Union
 
+from jpholiday.registy.registry import HolidayCheckerRegistry
 from .exception import JPHolidayTypeError
-from .registry import HolidayCheckerRegistry
 
 
 # TODO: 3.9をサポート切りしたらstr | Noneに変更

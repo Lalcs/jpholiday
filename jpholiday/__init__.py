@@ -1,5 +1,5 @@
-from .holiday import OriginalHolidayCheckerInterface
-from .jpholiday import *
+from jpholiday.checker.interface import OriginalHolidayCheckerInterface
+from jpholiday.jpholiday import *
 
 """
 日本の祝日を扱うクラス

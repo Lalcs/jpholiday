@@ -1,13 +1,6 @@
-from jpholiday.holiday import NewYearChecker, AdultDayChecker, FoundationDayChecker, EmperorsBirthdayChecker, \
-    VernalEquinoxDayChecker, GreeneryDayChecker, ShowaDayChecker, ConstitutionMemorialDayChecker, \
-    ChildrensDayChecker, \
-    SeaDayChecker, MountainDayChecker, RespectForTheAgedDayChecker, AutumnEquinoxDayChecker, \
-    HealthAndSportsDayChecker, \
-    SportsDayChecker, CultureDayChecker, LaborThanksgivingDayChecker, ExtraHoliday1959Checker, \
-    ExtraHoliday1989Checker, \
-    ExtraHoliday1990Checker, ExtraHoliday1993Checker, ExtraHoliday2019MayChecker, ExtraHoliday2019OctChecker, \
-    TransferHolidayChecker, NationalHolidayChecker
-from jpholiday.interface import HolidayCheckerInterface, CheckerRegistryInterface
+from jpholiday.checker.checker import *
+from jpholiday.checker.interface import HolidayCheckerInterface
+from jpholiday.registy.interface import CheckerRegistryInterface
 
 
 class HolidayCheckerRegistry(CheckerRegistryInterface):

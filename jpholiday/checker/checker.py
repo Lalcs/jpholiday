@@ -1,8 +1,9 @@
 import datetime
 import math
 
-from . import utils
-from .interface import HolidayCheckerInterface, OriginalHolidayCheckerInterface, CheckerRegistryInterface
+from jpholiday.checker import utils
+from jpholiday.checker.interface import HolidayCheckerInterface, OriginalHolidayCheckerInterface
+from jpholiday.registy.interface import CheckerRegistryInterface
 
 
 # 元日
