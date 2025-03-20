@@ -1,115 +1,140 @@
-# -*- coding: utf-8 -*-
-
 import datetime
-import warnings
+from typing import Any, Union, Iterator
 
-from . import registry
-from . import holiday
-from .exception import JPHolidayTypeError
-
-
-def is_holiday_name(date):
-    """
-    その日の祝日名を返します。
-    """
-
-    # Covert
-    date = _to_date(date)
-
-    for holiday in registry.RegistryHolder.get_registry():
-        if holiday.is_holiday_name(date):
-            return holiday.is_holiday_name(date)
-
-    return None
+from jpholiday.cache.in_memory import HolidayInMemoryCache
+from jpholiday.checker.interface import OriginalHolidayCheckerInterface
+from jpholiday.exception import JPHolidayTypeError
+from jpholiday.model.holiday import Holiday
+from jpholiday.registy.registry import HolidayCheckerRegistry
 
 
-def is_holiday(date):
-    """
-    その日が祝日かどうかを返します。
-    """
+class JPHoliday:
+    def __init__(self):
+        self._cache = HolidayInMemoryCache()
+        self.registry = HolidayCheckerRegistry()
 
-    # Covert
-    date = _to_date(date)
+    def holidays(self, date: Union[datetime.date, datetime.datetime]) -> list[Holiday]:
+        """
+        その日の祝日名を返します。
+        """
 
-    for holiday in registry.RegistryHolder.get_registry():
-        if holiday.is_holiday(date):
+        date = self._to_date(date)
+
+        cache = self._cache.get(date)
+        if cache is not None:
+            return cache
+
+        holidays = []
+        for holiday in self.registry.checkers():
+            if holiday.is_holiday(date):
+                holidays.append(Holiday(date, holiday.holiday_name(date)))
+
+        self._cache.set(date, holidays)
+
+        return holidays
+
+    def is_holiday(self, date: Union[datetime.date, datetime.datetime]) -> bool:
+        """
+        その日が祝日かどうかを返します。
+        """
+
+        date = self._to_date(date)
+
+        if len(self.holidays(date)) != 0:
             return True
 
-    return False
+        return False
 
+    def year_holidays(self, year: int) -> list[Holiday]:
+        """
+        その年の祝日日、祝日名を返します。
+        """
+        return list(self.iter_year_holidays(year))
 
-def year_holidays(year):
-    """
-    その年の祝日日、祝日名を返します。
-    """
-    date = datetime.date(year, 1, 1)
+    def iter_year_holidays(self, year: int) -> Iterator[Holiday]:
+        """
+        指定された年の祝日日、祝日名をイテレーターで返します。
+        """
+        date = datetime.date(year, 1, 1)
 
-    output = []
-    while date.year == year:
-        name = is_holiday_name(date)
-        if name is not None:
-            output.append((date, name))
+        while date.year == year:
+            result = self.holidays(date)
+            if result:
+                for holiday in result:
+                    yield holiday
 
-        date = date + datetime.timedelta(days=1)
+            date = date + datetime.timedelta(days=1)
 
-    return output
+    def month_holidays(self, year: int, month: int) -> list[Holiday]:
+        """
+        その月の祝日日、祝日名を返します。
+        """
+        return list(self.iter_month_holidays(year, month))
 
+    def iter_month_holidays(self, year: int, month: int) -> Iterator[Holiday]:
+        """
+        指定された月の祝日日、祝日名をイテレーターで返します。
+        """
+        date = datetime.date(year, month, 1)
 
-def month_holidays(year, month):
-    """
-    その月の祝日日、祝日名を返します。
-    """
-    date = datetime.date(year, month, 1)
+        while date.month == month:
+            result = self.holidays(date)
+            if result:
+                for holiday in result:
+                    yield holiday
 
-    output = []
-    while date.month == month:
-        name = is_holiday_name(date)
-        if name is not None:
-            output.append((date, name))
+            date = date + datetime.timedelta(days=1)
 
-        date = date + datetime.timedelta(days=1)
+    def between(
+            self,
+            start_date: Union[datetime.date, datetime.datetime],
+            end_date: Union[datetime.date, datetime.datetime]
+    ) -> list[Holiday]:
+        """
+        指定された期間の祝日日、祝日名をリストで返します。
+        """
+        return list(self.iter_between(start_date, end_date))
 
-    return output
+    def iter_between(
+            self,
+            start_date: Union[datetime.date, datetime.datetime],
+            end_date: Union[datetime.date, datetime.datetime]
+    ) -> Iterator[Holiday]:
+        """
+        指定された期間の祝日日、祝日名をイテレーターで返します。
+        """
+        current_date = self._to_date(start_date)
+        end_date = self._to_date(end_date)
 
+        while current_date <= end_date:
+            result = self.holidays(current_date)
+            if result:
+                for holiday in result:
+                    yield holiday
 
-def holidays(start_date, end_date):
-    """
-    指定された期間の祝日日、祝日名を返します。
-    """
-    warnings.warn(
-        "DeprecationWarning: Function 'jpholiday.holidays()' has moved to 'jpholiday.between()' in version '0.1.4' and will be removed in version '0.2'",
-        UserWarning
-    )
-    return between(start_date, end_date)
+            current_date = current_date + datetime.timedelta(days=1)
 
+    def _to_date(self, value: Any) -> datetime.date:
+        """
+        datetime型をdate型へ変換
+        それ以外は例外
+        """
+        if isinstance(value, datetime.datetime):
+            return value.date()
+        if isinstance(value, datetime.date):
+            return value
+        raise JPHolidayTypeError("is type datetime or date isinstance only.")
 
-def between(start_date, end_date):
-    """
-    指定された期間の祝日日、祝日名を返します。
-    """
+    def register(self, checker: OriginalHolidayCheckerInterface):
+        """
+        独自の祝日チェッカーを登録します。
+        """
+        self._cache.clear()
+        self.registry.register(checker)
 
-    # Covert
-    start_date = _to_date(start_date)
-    end_date = _to_date(end_date)
-
-    output = []
-    while start_date <= end_date:
-        name = is_holiday_name(start_date)
-        if name is not None:
-            output.append((start_date, name))
-
-        start_date = start_date + datetime.timedelta(days=1)
-
-    return output
-
-
-def _to_date(value):
-    """
-    datetime型をdate型へ変換
-    それ以外は例外
-    """
-    if isinstance(value, datetime.datetime):
-        return value.date()
-    if isinstance(value, datetime.date):
-        return value
-    raise JPHolidayTypeError("is type datetime or date isinstance only.")
+    def unregister(self, checker: OriginalHolidayCheckerInterface):
+        """
+        独自の祝日チェッカーを登録解除します。
+        """
+        self._cache.clear()
+        self.registry.unregister(checker)

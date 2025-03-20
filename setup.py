@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 import os
 import re
 from codecs import open
+
 from setuptools import setup
 
 with open(os.path.join('jpholiday', '__init__.py'), 'r', encoding='utf8') as f:
