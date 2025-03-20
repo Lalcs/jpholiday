@@ -1,4 +1,3 @@
-# coding: utf-8
 import datetime
 import unittest
 
@@ -49,5 +48,3 @@ class TestException(unittest.TestCase):
 
         with self.assertRaises(JPHolidayTypeError):
             jpholiday.between('2021-01-01', datetime.date(2021, 1, 1))
-
-

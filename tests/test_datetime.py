@@ -1,8 +1,8 @@
-# coding: utf-8
 import datetime
 import unittest
 
 import jpholiday
+
 
 class TestDateTime(unittest.TestCase):
 
@@ -61,10 +61,12 @@ class TestDateTime(unittest.TestCase):
         """
         皇室慶弔行事に伴う祝日
         """
-        self.assertEqual(jpholiday.is_holiday_name(datetime.datetime(1959, 4, 10, 1, 1, 1)), '皇太子・明仁親王の結婚の儀')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.datetime(1959, 4, 10, 1, 1, 1)),
+                         '皇太子・明仁親王の結婚の儀')
         self.assertEqual(jpholiday.is_holiday_name(datetime.datetime(1989, 2, 24, 1, 1, 1)), '昭和天皇の大喪の礼')
         self.assertEqual(jpholiday.is_holiday_name(datetime.datetime(1990, 11, 12, 1, 1, 1)), '即位の礼正殿の儀')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.datetime(1993, 6, 9, 1, 1, 1)), '皇太子・皇太子徳仁親王の結婚の儀')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.datetime(1993, 6, 9, 1, 1, 1)),
+                         '皇太子・皇太子徳仁親王の結婚の儀')
         self.assertEqual(jpholiday.is_holiday_name(datetime.datetime(2019, 5, 1, 1, 1, 1)), '天皇の即位の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.datetime(2019, 10, 22, 1, 1, 1)), '即位礼正殿の儀')
         self.assertTrue(jpholiday.is_holiday(datetime.datetime(1959, 4, 10, 1, 1, 1)))
