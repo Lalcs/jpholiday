@@ -1,7 +1,16 @@
-from jpholiday.interface import HolidayChecker
+from jpholiday.holiday import NewYearChecker, AdultDayChecker, FoundationDayChecker, EmperorsBirthdayChecker, \
+    VernalEquinoxDayChecker, GreeneryDayChecker, ShowaDayChecker, ConstitutionMemorialDayChecker, \
+    ChildrensDayChecker, \
+    SeaDayChecker, MountainDayChecker, RespectForTheAgedDayChecker, AutumnEquinoxDayChecker, \
+    HealthAndSportsDayChecker, \
+    SportsDayChecker, CultureDayChecker, LaborThanksgivingDayChecker, ExtraHoliday1959Checker, \
+    ExtraHoliday1989Checker, \
+    ExtraHoliday1990Checker, ExtraHoliday1993Checker, ExtraHoliday2019MayChecker, ExtraHoliday2019OctChecker, \
+    TransferHolidayChecker, NationalHolidayChecker
+from jpholiday.interface import HolidayCheckerInterface, CheckerRegistryInterface
 
 
-class HolidayCheckerRegistry:
+class HolidayCheckerRegistry(CheckerRegistryInterface):
     _instance = None
 
     @classmethod
@@ -11,21 +20,7 @@ class HolidayCheckerRegistry:
 
         return cls._instance
 
-    # def __new__(cls):
-    #     if cls._instance is None:
-    #         cls.instance = super().__new__(cls)
-    #     return cls._instance
-
     def __init__(self):
-        from jpholiday.holiday import NewYearChecker, AdultDayChecker, FoundationDayChecker, EmperorsBirthdayChecker, \
-            VernalEquinoxDayChecker, GreeneryDayChecker, ShowaDayChecker, ConstitutionMemorialDayChecker, \
-            ChildrensDayChecker, \
-            SeaDayChecker, MountainDayChecker, RespectForTheAgedDayChecker, AutumnEquinoxDayChecker, \
-            HealthAndSportsDayChecker, \
-            SportsDayChecker, CultureDayChecker, LaborThanksgivingDayChecker, ExtraHoliday1959Checker, \
-            ExtraHoliday1989Checker, \
-            ExtraHoliday1990Checker, ExtraHoliday1993Checker, ExtraHoliday2019MayChecker, ExtraHoliday2019OctChecker, \
-            TransferHolidayChecker, NationalHolidayChecker
         self._checker = [
             NewYearChecker(),
             AdultDayChecker(),
@@ -54,13 +49,13 @@ class HolidayCheckerRegistry:
             NationalHolidayChecker(self),
         ]
 
-    def checkers(self) -> list[HolidayChecker]:
+    def checkers(self) -> list[HolidayCheckerInterface]:
         return self._checker
 
-    def register(self, checker: HolidayChecker):
+    def register(self, checker: HolidayCheckerInterface):
         if any(isinstance(h, type(checker)) for h in self._checker):
             return
         self._checker.append(checker)
 
-    def unregister(self, checker: HolidayChecker):
+    def unregister(self, checker: HolidayCheckerInterface):
         self._checker = [h for h in self._checker if not isinstance(h, type(checker))]

@@ -1,11 +1,13 @@
 import datetime
 import warnings
+from typing import Union
 
 from .exception import JPHolidayTypeError
 from .registry import HolidayCheckerRegistry
 
 
-def is_holiday_name(date: datetime.date) -> str | None:
+# TODO: 3.9をサポート切りしたらstr | Noneに変更
+def is_holiday_name(date: datetime.date) -> Union[str, None]:
     """
     その日の祝日名を返します。
     """

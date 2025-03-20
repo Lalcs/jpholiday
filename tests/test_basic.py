@@ -15,7 +15,7 @@ class TestBasic(unittest.TestCase):
         独自の休み
         """
 
-        class TestHoliday(jpholiday.OriginalHolidayChecker):
+        class TestHoliday(jpholiday.OriginalHolidayCheckerInterface):
             def is_holiday(self, date: datetime.date) -> bool:
                 if date == datetime.date(2020, 2, 3) or date == datetime.date(2020, 2, 5):
                     return True

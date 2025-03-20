@@ -1,4 +1,4 @@
-from .holiday import OriginalHolidayChecker
+from .holiday import OriginalHolidayCheckerInterface
 from .jpholiday import *
 
 """
