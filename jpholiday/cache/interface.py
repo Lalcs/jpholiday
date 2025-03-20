@@ -10,9 +10,13 @@ class HolidayCacheInterface(ABC):
         pass
 
     @abstractmethod
-    def set(self, holiday: Holiday):
+    def set(self, date: datetime.date, holidays: list[Holiday]):
         pass
 
     @abstractmethod
     def delete(self, date: datetime.date):
+        pass
+
+    @abstractmethod
+    def clear(self):
         pass
