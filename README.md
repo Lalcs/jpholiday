@@ -201,10 +201,4 @@ jpholiday.is_holiday_name(datetime.date(2021, 2, 22))
 
 ## Star History
 
-<a href="https://www.star-history.com/#Lalcs/jpholiday&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Lalcs/jpholiday&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Lalcs/jpholiday&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Lalcs/jpholiday&type=Date" />
- </picture>
-</a>
+[![Star History Chart](https://api.star-history.com/svg?repos=Lalcs/jpholiday&type=Date)](https://www.star-history.com/#Lalcs/jpholiday&Date)
