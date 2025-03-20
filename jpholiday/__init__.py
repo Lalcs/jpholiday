@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
+from .holiday import OriginalHolidayChecker
 from .jpholiday import *
-from .registry import OriginalHoliday
 
 """
 日本の祝日を扱うクラス

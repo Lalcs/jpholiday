@@ -1,14 +1,11 @@
-# -*- coding: utf-8 -*-
-
 import datetime
 import warnings
 
-from . import registry
-from . import holiday
 from .exception import JPHolidayTypeError
+from .registry import HolidayCheckerRegistry
 
 
-def is_holiday_name(date):
+def is_holiday_name(date: datetime.date) -> str | None:
     """
     その日の祝日名を返します。
     """
@@ -16,14 +13,14 @@ def is_holiday_name(date):
     # Covert
     date = _to_date(date)
 
-    for holiday in registry.RegistryHolder.get_registry():
-        if holiday.is_holiday_name(date):
-            return holiday.is_holiday_name(date)
+    for holiday in HolidayCheckerRegistry.get_instance().checkers():
+        if holiday.is_holiday(date):
+            return holiday.holiday_name(date)
 
     return None
 
 
-def is_holiday(date):
+def is_holiday(date: datetime.date) -> bool:
     """
     その日が祝日かどうかを返します。
     """
@@ -31,14 +28,14 @@ def is_holiday(date):
     # Covert
     date = _to_date(date)
 
-    for holiday in registry.RegistryHolder.get_registry():
+    for holiday in HolidayCheckerRegistry.get_instance().checkers():
         if holiday.is_holiday(date):
             return True
 
     return False
 
 
-def year_holidays(year):
+def year_holidays(year: int):
     """
     その年の祝日日、祝日名を返します。
     """
@@ -55,7 +52,7 @@ def year_holidays(year):
     return output
 
 
-def month_holidays(year, month):
+def month_holidays(year: int, month: int):
     """
     その月の祝日日、祝日名を返します。
     """

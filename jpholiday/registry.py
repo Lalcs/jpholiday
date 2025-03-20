@@ -1,69 +1,66 @@
-# -*- coding: utf-8 -*-
+from jpholiday.interface import HolidayChecker
 
-class RegistryHolder(type):
-    _REGISTRY = []
 
-    def __new__(cls, name, bases, attrs):
-        new_cls = type.__new__(cls, name, bases, attrs)
-
-        cls.register(new_cls)
-
-        return new_cls
+class HolidayCheckerRegistry:
+    _instance = None
 
     @classmethod
-    def get_registry(cls):
-        return list(cls._REGISTRY)
+    def get_instance(cls):
+        if cls._instance is None:
+            cls._instance = cls()
 
-    @classmethod
-    def register(cls, register_class):
-        instance = register_class()
-        cls._REGISTRY.append(instance)
+        return cls._instance
 
-    @classmethod
-    def unregister(cls, register_class):
-        for registered_class in cls._REGISTRY:
-            if type(registered_class) != register_class:
-                continue
+    # def __new__(cls):
+    #     if cls._instance is None:
+    #         cls.instance = super().__new__(cls)
+    #     return cls._instance
 
-            cls._REGISTRY.remove(registered_class)
-            break
+    def __init__(self):
+        from jpholiday.holiday import NewYearChecker, AdultDayChecker, FoundationDayChecker, EmperorsBirthdayChecker, \
+            VernalEquinoxDayChecker, GreeneryDayChecker, ShowaDayChecker, ConstitutionMemorialDayChecker, \
+            ChildrensDayChecker, \
+            SeaDayChecker, MountainDayChecker, RespectForTheAgedDayChecker, AutumnEquinoxDayChecker, \
+            HealthAndSportsDayChecker, \
+            SportsDayChecker, CultureDayChecker, LaborThanksgivingDayChecker, ExtraHoliday1959Checker, \
+            ExtraHoliday1989Checker, \
+            ExtraHoliday1990Checker, ExtraHoliday1993Checker, ExtraHoliday2019MayChecker, ExtraHoliday2019OctChecker, \
+            TransferHolidayChecker, NationalHolidayChecker
+        self._checker = [
+            NewYearChecker(),
+            AdultDayChecker(),
+            FoundationDayChecker(),
+            EmperorsBirthdayChecker(),
+            VernalEquinoxDayChecker(),
+            GreeneryDayChecker(),
+            ShowaDayChecker(),
+            ConstitutionMemorialDayChecker(),
+            ChildrensDayChecker(),
+            SeaDayChecker(),
+            MountainDayChecker(),
+            RespectForTheAgedDayChecker(),
+            AutumnEquinoxDayChecker(),
+            HealthAndSportsDayChecker(),
+            SportsDayChecker(),
+            CultureDayChecker(),
+            LaborThanksgivingDayChecker(),
+            ExtraHoliday1959Checker(),
+            ExtraHoliday1989Checker(),
+            ExtraHoliday1990Checker(),
+            ExtraHoliday1993Checker(),
+            ExtraHoliday2019MayChecker(),
+            ExtraHoliday2019OctChecker(),
+            TransferHolidayChecker(self),
+            NationalHolidayChecker(self),
+        ]
 
-class BaseHoliday(metaclass=RegistryHolder):
+    def checkers(self) -> list[HolidayChecker]:
+        return self._checker
 
-    def is_holiday(self, date):
-        if self._is_holiday(date):
-            return True
-        else:
-            return False
+    def register(self, checker: HolidayChecker):
+        if any(isinstance(h, type(checker)) for h in self._checker):
+            return
+        self._checker.append(checker)
 
-    def is_holiday_name(self, date):
-        if self._is_holiday(date):
-            return self._is_holiday_name(date)
-        else:
-            return None
-
-    def _is_holiday(self, date):
-        pass
-
-    def _is_holiday_name(self, date):
-        pass
-
-class OriginalHoliday(metaclass=RegistryHolder):
-
-    def is_holiday(self, date):
-        if self._is_holiday(date):
-            return True
-        else:
-            return False
-
-    def is_holiday_name(self, date):
-        if self._is_holiday(date):
-            return self._is_holiday_name(date)
-        else:
-            return None
-
-    def _is_holiday(self, date):
-        pass
-
-    def _is_holiday_name(self, date):
-        pass
+    def unregister(self, checker: HolidayChecker):
+        self._checker = [h for h in self._checker if not isinstance(h, type(checker))]
