@@ -6,10 +6,13 @@ import jpholiday
 
 class TestBasic(unittest.TestCase):
 
-    # Init
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def test_basic(self):
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(2020, 2, 3)), None)
+        self.assertEqual(jpholiday.is_holiday(datetime.date(2020, 2, 3)), False)
+        
     def test_original_holiday(self):
         """
         独自の休み
