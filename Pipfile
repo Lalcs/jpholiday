@@ -9,10 +9,9 @@ name = "pypi"
 twine = "*"
 wheel = "*"
 coverage = "*"
-freezegun = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.13"
 
 [scripts]
 build = "python setup.py sdist bdist_wheel"
