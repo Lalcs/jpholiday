@@ -2,7 +2,7 @@ import datetime
 import unittest
 
 import jpholiday
-from jpholiday import JPHolidayTypeError
+from jpholiday.exception import JPHolidayTypeError
 
 
 class TestException(unittest.TestCase):

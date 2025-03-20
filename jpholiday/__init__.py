@@ -1,5 +1,6 @@
 from jpholiday.checker.interface import OriginalHolidayCheckerInterface
-from jpholiday.jpholiday import *
+from jpholiday.functions import *
+from jpholiday.jpholiday import JPHoliday
 
 """
 日本の祝日を扱うクラス
@@ -11,4 +12,4 @@ from jpholiday.jpholiday import *
 2020年 五輪特別措置法改正案
 """
 
-__version__ = '0.1.10'
+__version__ = '1.0.0'

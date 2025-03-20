@@ -1,8 +1,8 @@
 import datetime
-from typing import Union, Any
+from typing import Any, Union
 
-from jpholiday import OriginalHolidayCheckerInterface
 from jpholiday.cache.in_memory import HolidayInMemoryCache
+from jpholiday.checker.interface import OriginalHolidayCheckerInterface
 from jpholiday.exception import JPHolidayTypeError
 from jpholiday.model.holiday import Holiday
 from jpholiday.registy.registry import HolidayCheckerRegistry
@@ -11,9 +11,9 @@ from jpholiday.registy.registry import HolidayCheckerRegistry
 class JPHoliday:
     def __init__(self):
         self._cache = HolidayInMemoryCache()
-        self.registry = HolidayCheckerRegistry.get_instance()
+        self.registry = HolidayCheckerRegistry()
 
-    def holidays(self, date: datetime.date) -> list[Holiday]:
+    def holidays(self, date: Union[datetime.date, datetime.datetime]) -> list[Holiday]:
         """
         その日の祝日名を返します。
         """
@@ -33,7 +33,7 @@ class JPHoliday:
 
         return holidays
 
-    def is_holiday(self, date: datetime.date) -> bool:
+    def is_holiday(self, date: Union[datetime.date, datetime.datetime]) -> bool:
         """
         その日が祝日かどうかを返します。
         """
@@ -119,68 +119,3 @@ class JPHoliday:
         """
         self._cache.clear()
         self.registry.unregister(checker)
-
-
-new_api = JPHoliday()
-
-
-def is_holiday_name(date: datetime.date) -> Union[str, None]:
-    """
-    その日の祝日名を返します。
-    """
-
-    result = new_api.holidays(date)
-
-    if len(result) == 0:
-        return None
-
-    return result[0].name
-
-
-def is_holiday(date: datetime.date) -> bool:
-    """
-    その日が祝日かどうかを返します。
-    """
-
-    return new_api.is_holiday(date)
-
-
-def year_holidays(year: int) -> list[tuple[datetime.date, str]]:
-    """
-    その年の祝日日、祝日名を返します。
-    """
-
-    result = new_api.year_holidays(year)
-    return [(holiday.date, holiday.name) for holiday in result]
-
-
-def month_holidays(year: int, month: int) -> list[tuple[datetime.date, str]]:
-    """
-    その月の祝日日、祝日名を返します。
-    """
-
-    result = new_api.month_holidays(year, month)
-    return [(holiday.date, holiday.name) for holiday in result]
-
-
-def between(start_date, end_date) -> list[tuple[datetime.date, str]]:
-    """
-    指定された期間の祝日日、祝日名を返します。
-    """
-
-    result = new_api.between(start_date, end_date)
-    return [(holiday.date, holiday.name) for holiday in result]
-
-
-def register(checker: OriginalHolidayCheckerInterface):
-    """
-    独自の祝日チェッカーを登録します。
-    """
-    new_api.register(checker)
-
-
-def unregister(checker: OriginalHolidayCheckerInterface):
-    """
-    独自の祝日チェッカーを登録解除します。
-    """
-    new_api.unregister(checker)

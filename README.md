@@ -7,6 +7,8 @@
 [![image](https://img.shields.io/pypi/dm/jpholiday)](https://pypistats.org/packages/jpholiday)
 ![Unittest](https://github.com/Lalcs/jpholiday/workflows/Unittest/badge.svg)
 
+![image](./docs/images/logo.png)
+
 日本の祝日を取得するライブラリ
 
 ## Installation
@@ -15,7 +17,205 @@
 pip install jpholiday
 ```
 
-## Sample Code
+## Class
+
+### 指定日の祝日名を取得
+
+```python
+from jpholiday import JPHoliday
+import datetime
+
+jpholiday = JPHoliday()
+
+jpholiday.holidays(datetime.date(2017, 1, 1))
+> [
+    Holiday(
+        date=datetime.date(2017, 1, 1),
+        name='元日'
+    )
+]
+jpholiday.holidays(datetime.date(2017, 1, 2))
+> [
+    Holiday(
+        date=datetime.date(2017, 1, 2),
+        name='元日 振替休日'
+    )
+]
+jpholiday.holidays(datetime.date(2017, 1, 3))
+> []
+```
+
+### 指定日が祝日か判定
+
+```python
+from jpholiday import JPHoliday
+import datetime
+
+jpholiday = JPHoliday()
+
+# datetime.date
+jpholiday.is_holiday(datetime.date(2017, 1, 1))
+> True
+jpholiday.is_holiday(datetime.date(2017, 1, 2))
+> True
+jpholiday.is_holiday(datetime.date(2017, 1, 3))
+> False
+
+# datetime.datetime
+jpholiday.is_holiday(datetime.datetime(2017, 1, 1, 1, 1, 1))
+> True
+jpholiday.is_holiday(datetime.datetime(2017, 1, 2, 1, 1, 1))
+> True
+jpholiday.is_holiday(datetime.datetime(2017, 1, 3, 1, 1, 1))
+> False
+```
+
+### 指定年の祝日を取得
+
+```python
+from jpholiday import JPHoliday
+import datetime
+
+jpholiday = JPHoliday()
+
+jpholiday.year_holidays(2017)
+> [
+    Holiday(
+        date=datetime.date(2017, 1, 1),
+        name='元日'
+    ),
+    Holiday(
+        date=datetime.date(2017, 1, 2),
+        name='元日 振替休日'
+    ),
+    ...
+]
+```
+
+### 指定月の祝日を取得
+
+```python
+from jpholiday import JPHoliday
+import datetime
+
+jpholiday = JPHoliday()
+
+jpholiday.month_holidays(2017, 5)
+> [
+    Holiday(
+        date=datetime.date(2017, 5, 3),
+        name='憲法記念日'
+    ),
+    Holiday(
+        date=datetime.date(2017, 5, 4),
+        name='みどりの日'
+    ),
+    Holiday(
+        date=datetime.date(2017, 5, 5),
+        name='こどもの日'
+    )
+]
+```
+
+### 指定範囲の祝日を取得
+
+```python
+from jpholiday import JPHoliday
+import datetime
+
+jpholiday = JPHoliday()
+
+# datetime.date
+jpholiday.between(datetime.date(2017, 1, 1), datetime.date(2017, 5, 3))
+> [
+    Holiday(
+        date=datetime.date(2017, 1, 1),
+        name='元日'
+    ),
+    Holiday(
+        date=datetime.date(2017, 1, 2),
+        name='元日 振替休日'
+    ),
+    ...
+]
+
+# datetime.datetime
+jpholiday.between(datetime.datetime(2017, 1, 1, 3, 15, 0), datetime.datetime(2017, 5, 3, 12, 30, 12))
+> [
+    Holiday(
+        date=datetime.date(2017, 1, 1),
+        name='元日'
+    ),
+    Holiday(
+        date=datetime.date(2017, 1, 2),
+        name='元日 振替休日'
+    ),
+    ...
+]
+```
+
+### 独自の休日を追加
+
+```python
+from jpholiday import JPHoliday, OriginalHolidayCheckerInterface
+import datetime
+
+jpholiday = JPHoliday()
+
+
+class TestHoliday(OriginalHolidayCheckerInterface):
+    def is_holiday(self, date):
+        if date == datetime.date(2020, 2, 9):
+            return True
+        return False
+
+    def holiday_name(self, date):
+        return '特別休暇'
+
+
+jpholiday.register(TestHoliday())
+
+jpholiday.holidays(datetime.date(2020, 2, 9))
+> [
+    Holiday(
+        date=datetime.date(2020, 2, 9),
+        name='特別休暇'
+    )
+]
+
+jpholiday.is_holiday(datetime.date(2020, 2, 9))
+> True
+```
+
+### 独自の休日を削除
+
+```python
+from jpholiday import JPHoliday, OriginalHolidayCheckerInterface
+import datetime
+
+jpholiday = JPHoliday()
+
+
+class TestHoliday(OriginalHolidayCheckerInterface):
+    def is_holiday(self, date):
+        if date == datetime.date(2020, 2, 9):
+            return True
+        return False
+
+    def holiday_name(self, date):
+        return '特別休暇'
+
+
+jpholiday.unregister(TestHoliday())
+
+jpholiday.holidays(datetime.date(2020, 2, 9))
+> []
+
+jpholiday.is_holiday(datetime.date(2020, 2, 9))
+> False
+```
+
+## Functions
 
 ### 指定日の祝日名を取得
 
@@ -133,15 +333,17 @@ import jpholiday
 import datetime
 
 
-class TestHoliday(jpholiday.OriginalHoliday):
-    def _is_holiday(self, date):
+class TestHoliday(jpholiday.OriginalHolidayCheckerInterface):
+    def is_holiday(self, date):
         if date == datetime.date(2020, 2, 9):
             return True
         return False
 
-    def _is_holiday_name(self, date):
+    def holiday_name(self, date):
         return '特別休暇'
 
+
+jpholiday.register(TestHoliday())
 
 jpholiday.is_holiday_name(datetime.date(2020, 2, 9))
 > '特別休暇'
@@ -154,51 +356,24 @@ jpholiday.is_holiday(datetime.date(2020, 2, 9))
 
 ```python
 import jpholiday
-
-jpholiday.OriginalHoliday.unregister(TestHoliday)
-```
-
-## Example
-
-### 独自の休日をファイルから読み込む
-
-```python
-import jpholiday
-import configparser
+import datetime
 
 
-class TestHoliday(jpholiday.OriginalHoliday):
-    original_holidays = {}
-
-    config = configparser.ConfigParser()
-    config.read('holidays.ini')
-    if 'HOLIDAYS' in config:
-        original_holidays = config['HOLIDAYS']
-
-    def _is_holiday(self, date):
-        if date in [datetime.strptime(holiday, '%Y-%m-%d').date() for holiday in self.original_holidays.keys()]:
+class TestHoliday(jpholiday.OriginalHolidayCheckerInterface):
+    def is_holiday(self, date):
+        if date == datetime.date(2020, 2, 9):
             return True
         return False
 
-    def _is_holiday_name(self, date):
-        if date.strftime('%Y-%m-%d') in self.original_holidays.keys():
-            return self.original_holidays[date.strftime('%Y-%m-%d')]
-        else:
-            return None
+    def holiday_name(self, date):
+        return '特別休暇'
 
 
-'holidays.ini'
-[HOLIDAYS]
-2021 - 02 - 22: 特別休暇1
-2021 - 02 - 24: 特別休暇2
+jpholiday.unregister(TestHoliday())
 
-jpholiday.is_holiday(datetime.date(2021, 2, 22))
-> True
+jpholiday.is_holiday_name(datetime.date(2020, 2, 9))
+> None
 
-jpholiday.is_holiday_name(datetime.date(2021, 2, 22))
-> 特別休暇1
+jpholiday.is_holiday(datetime.date(2020, 2, 9))
+> False
 ```
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Lalcs/jpholiday&type=Date)](https://www.star-history.com/#Lalcs/jpholiday&Date)

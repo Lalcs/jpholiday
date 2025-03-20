@@ -4,17 +4,8 @@ from jpholiday.registy.interface import CheckerRegistryInterface
 
 
 class HolidayCheckerRegistry(CheckerRegistryInterface):
-    _instance = None
-
-    @classmethod
-    def get_instance(cls):
-        if cls._instance is None:
-            cls._instance = cls()
-
-        return cls._instance
-
     def __init__(self):
-        self._checker = [
+        self._checker: list[HolidayCheckerInterface] = [
             NewYearChecker(),
             AdultDayChecker(),
             FoundationDayChecker(),
