@@ -12,4 +12,4 @@ from jpholiday.jpholiday import JPHoliday
 2020年 五輪特別措置法改正案
 """
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
