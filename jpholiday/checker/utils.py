@@ -12,7 +12,8 @@ def _week_day(date, week, weekday):
     if weekday < 1 or weekday > 7:
         return None
 
-    lines = calendar.monthcalendar(date.year, date.month)
+    c = calendar.TextCalendar(firstweekday=calendar.MONDAY)
+    lines = c.monthdayscalendar(date.year, date.month)
 
     days = []
     for line in lines:
