@@ -1,25 +1,57 @@
-name: Upload Python Package
+name: Publish to PyPI
 
-on: [ workflow_dispatch ]
+on:
+  workflow_dispatch:
+  release:
+    types: [ published ]
 
 jobs:
-  deploy:
+  build-and-publish:
     runs-on: ubuntu-latest
+
     steps:
-      - name: CheckOut Repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Set up Python 3.x
-        uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Configure Poetry
+        run: |
+          poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+
       - name: Install dependencies
+        run: poetry install --no-interaction
+
+      - name: Build package
+        run: poetry build
+
+      - name: Verify package
         run: |
-          python -m pip install --upgrade pip
-          pip install setuptools wheel twine
-      - name: Build and publish
+          echo "Built packages:"
+          ls -la dist/
+
+      - name: Publish to Test PyPI (optional)
+        if: github.event_name == 'workflow_dispatch'
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+          POETRY_REPOSITORIES_TEST_PYPI_URL: https://test.pypi.org/legacy/
+          POETRY_PYPI_TOKEN_TEST_PYPI: ${{ secrets.TEST_PYPI_API_TOKEN }}
         run: |
-          python setup.py sdist bdist_wheel
-          twine upload dist/*
+          poetry config repositories.test-pypi https://test.pypi.org/legacy/
+          poetry config pypi-token.test-pypi ${{ secrets.TEST_PYPI_API_TOKEN }}
+          poetry publish -r test-pypi --skip-existing
+        continue-on-error: true
+
+      - name: Publish to PyPI
+        if: github.event_name == 'release' && github.event.action == 'published'
+        run: poetry publish

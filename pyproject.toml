@@ -1,0 +1,59 @@
+[project]
+name = "jpholiday"
+description = "Pure-Python Japan Public Holiday Generate"
+authors = [
+    { name = "Vatis", email = "vatis@lalcs.com" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+]
+dynamic = ["version"]
+keywords = ["japan", "holiday", "japanese", "calendar", "public-holiday", "祝日"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Other/Nonlisted Topic",
+    "Natural Language :: Japanese",
+    "Natural Language :: English",
+    "Typing :: Typed",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Lalcs/jpholiday"
+"Bug Tracker" = "https://github.com/Lalcs/jpholiday/issues"
+"Repository" = "https://github.com/Lalcs/jpholiday"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry]
+version = "0.0.0"
+
+[tool.poetry.requires-plugins]
+poetry-dynamic-versioning = { version = ">=1.0.0,<2.0.0", extras = ["plugin"] }
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.9.2"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+format-jinja = """
+    {%- if distance == 0 -%}
+        {{ serialize_pep440(base, stage, revision) }}
+    {%- else -%}
+        {{ timestamp[:4] }}.{{ timestamp[4:6] }}.{{ timestamp[6:8] }}.{{ timestamp[8:] }}
+    {%- endif -%}
+"""
