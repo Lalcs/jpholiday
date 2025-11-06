@@ -123,7 +123,9 @@ class JPHoliday:
             return value.date()
         if isinstance(value, datetime.date):
             return value
-        raise JPHolidayTypeError("is type datetime or date isinstance only.")
+        raise JPHolidayTypeError(
+            f"Expected datetime.date or datetime.datetime, got {type(value).__name__}"
+        )
 
     def register(self, checker: OriginalHolidayCheckerInterface) -> None:
         """
