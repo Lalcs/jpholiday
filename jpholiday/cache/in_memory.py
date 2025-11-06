@@ -6,17 +6,17 @@ from jpholiday.model.holiday import Holiday
 
 
 class HolidayInMemoryCache(HolidayCacheInterface):
-    def __init__(self):
+    def __init__(self) -> None:
         self._cache: dict[datetime.date, list[Holiday]] = {}
 
     def get(self, date: datetime.date) -> Optional[list[Holiday]]:
         return self._cache.get(date, None)
 
-    def set(self, date: datetime.date, holidays: list[Holiday]):
+    def set(self, date: datetime.date, holidays: list[Holiday]) -> None:
         self._cache[date] = holidays
 
-    def delete(self, date: datetime.date):
+    def delete(self, date: datetime.date) -> None:
         self._cache.pop(date, None)
 
-    def clear(self):
+    def clear(self) -> None:
         self._cache.clear()

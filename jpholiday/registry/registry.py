@@ -1,10 +1,10 @@
 from jpholiday.checker.checker import *
 from jpholiday.checker.interface import HolidayCheckerInterface
-from jpholiday.registy.interface import CheckerRegistryInterface
+from jpholiday.registry.interface import CheckerRegistryInterface
 
 
 class HolidayCheckerRegistry(CheckerRegistryInterface):
-    def __init__(self):
+    def __init__(self) -> None:
         self._checker: list[HolidayCheckerInterface] = [
             NewYearChecker(),
             AdultDayChecker(),
@@ -36,10 +36,10 @@ class HolidayCheckerRegistry(CheckerRegistryInterface):
     def checkers(self) -> list[HolidayCheckerInterface]:
         return self._checker
 
-    def register(self, checker: HolidayCheckerInterface):
+    def register(self, checker: HolidayCheckerInterface) -> None:
         if any(isinstance(h, type(checker)) for h in self._checker):
             return
         self._checker.append(checker)
 
-    def unregister(self, checker: HolidayCheckerInterface):
+    def unregister(self, checker: HolidayCheckerInterface) -> None:
         self._checker = [h for h in self._checker if not isinstance(h, type(checker))]

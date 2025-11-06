@@ -5,11 +5,11 @@ from jpholiday.cache.in_memory import HolidayInMemoryCache
 from jpholiday.checker.interface import OriginalHolidayCheckerInterface
 from jpholiday.exception import JPHolidayTypeError
 from jpholiday.model.holiday import Holiday
-from jpholiday.registy.registry import HolidayCheckerRegistry
+from jpholiday.registry.registry import HolidayCheckerRegistry
 
 
 class JPHoliday:
-    def __init__(self):
+    def __init__(self) -> None:
         self._cache = HolidayInMemoryCache()
         self.registry = HolidayCheckerRegistry()
 
@@ -123,16 +123,18 @@ class JPHoliday:
             return value.date()
         if isinstance(value, datetime.date):
             return value
-        raise JPHolidayTypeError("is type datetime or date isinstance only.")
+        raise JPHolidayTypeError(
+            f"Expected datetime.date or datetime.datetime, got {type(value).__name__}"
+        )
 
-    def register(self, checker: OriginalHolidayCheckerInterface):
+    def register(self, checker: OriginalHolidayCheckerInterface) -> None:
         """
         独自の祝日チェッカーを登録します。
         """
         self._cache.clear()
         self.registry.register(checker)
 
-    def unregister(self, checker: OriginalHolidayCheckerInterface):
+    def unregister(self, checker: OriginalHolidayCheckerInterface) -> None:
         """
         独自の祝日チェッカーを登録解除します。
         """

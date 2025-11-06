@@ -3,7 +3,7 @@ import math
 
 from jpholiday.checker import utils
 from jpholiday.checker.interface import HolidayCheckerInterface, OriginalHolidayCheckerInterface
-from jpholiday.registy.interface import CheckerRegistryInterface
+from jpholiday.registry.interface import CheckerRegistryInterface
 
 
 # 元日
