@@ -9,9 +9,9 @@ class CheckerRegistryInterface(ABC):
         pass
 
     @abstractmethod
-    def register(self, checker: HolidayCheckerInterface):
+    def register(self, checker: HolidayCheckerInterface) -> None:
         pass
 
     @abstractmethod
-    def unregister(self, checker: HolidayCheckerInterface):
+    def unregister(self, checker: HolidayCheckerInterface) -> None:
         pass

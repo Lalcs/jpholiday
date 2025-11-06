@@ -9,7 +9,7 @@ from jpholiday.registry.registry import HolidayCheckerRegistry
 
 
 class JPHoliday:
-    def __init__(self):
+    def __init__(self) -> None:
         self._cache = HolidayInMemoryCache()
         self.registry = HolidayCheckerRegistry()
 
@@ -125,14 +125,14 @@ class JPHoliday:
             return value
         raise JPHolidayTypeError("is type datetime or date isinstance only.")
 
-    def register(self, checker: OriginalHolidayCheckerInterface):
+    def register(self, checker: OriginalHolidayCheckerInterface) -> None:
         """
         独自の祝日チェッカーを登録します。
         """
         self._cache.clear()
         self.registry.register(checker)
 
-    def unregister(self, checker: OriginalHolidayCheckerInterface):
+    def unregister(self, checker: OriginalHolidayCheckerInterface) -> None:
         """
         独自の祝日チェッカーを登録解除します。
         """

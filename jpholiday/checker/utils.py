@@ -1,8 +1,9 @@
 import calendar
 import datetime
+from typing import Optional
 
 
-def _week_day(date, week, weekday):
+def _week_day(date: datetime.date, week: int, weekday: int) -> Optional[datetime.date]:
     """
     特定の月の第1月曜日などを返します。
     """

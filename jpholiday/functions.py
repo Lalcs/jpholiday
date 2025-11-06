@@ -57,14 +57,14 @@ def between(
     return [it.to_tuple() for it in result]
 
 
-def register(checker: OriginalHolidayCheckerInterface):
+def register(checker: OriginalHolidayCheckerInterface) -> None:
     """
     独自の祝日チェッカーを登録します。
     """
     new_api.register(checker)
 
 
-def unregister(checker: OriginalHolidayCheckerInterface):
+def unregister(checker: OriginalHolidayCheckerInterface) -> None:
     """
     独自の祝日チェッカーを登録解除します。
     """
