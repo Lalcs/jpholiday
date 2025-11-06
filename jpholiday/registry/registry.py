@@ -1,6 +1,6 @@
 from jpholiday.checker.checker import *
 from jpholiday.checker.interface import HolidayCheckerInterface
-from jpholiday.registy.interface import CheckerRegistryInterface
+from jpholiday.registry.interface import CheckerRegistryInterface
 
 
 class HolidayCheckerRegistry(CheckerRegistryInterface):

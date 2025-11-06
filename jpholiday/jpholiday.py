@@ -5,7 +5,7 @@ from jpholiday.cache.in_memory import HolidayInMemoryCache
 from jpholiday.checker.interface import OriginalHolidayCheckerInterface
 from jpholiday.exception import JPHolidayTypeError
 from jpholiday.model.holiday import Holiday
-from jpholiday.registy.registry import HolidayCheckerRegistry
+from jpholiday.registry.registry import HolidayCheckerRegistry
 
 
 class JPHoliday:
