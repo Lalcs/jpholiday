@@ -8,7 +8,6 @@ Tests cover:
 - Individual astronomical functions
 """
 
-import datetime
 import time
 import unittest
 import math
