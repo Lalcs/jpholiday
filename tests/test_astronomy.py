@@ -10,7 +10,6 @@ Tests cover:
 
 import time
 import unittest
-import math
 
 from jpholiday.checker import astronomy
 
