@@ -1,5 +1,4 @@
 import datetime
-import math
 
 from jpholiday.checker import utils
 from jpholiday.checker import astronomy
@@ -78,7 +77,7 @@ class VernalEquinoxDayChecker(HolidayCheckerInterface):
         Dependencies: Standard library only
         """
 
-        if year <= 1948:
+        if year < 1948:
             return 0
 
         return astronomy.calculate_vernal_equinox(year)
@@ -226,7 +225,7 @@ class AutumnEquinoxDayChecker(HolidayCheckerInterface):
         Dependencies: Standard library only
         """
 
-        if year <= 1948:
+        if year < 1948:
             return 0
 
         return astronomy.calculate_autumn_equinox(year)

@@ -12,7 +12,6 @@ Dependencies: math, datetime (standard library only)
 
 import math
 import datetime
-from typing import Tuple
 
 
 # Constants
@@ -193,7 +192,7 @@ def solar_ecliptic_longitude(jd: float) -> float:
     omega = 125.04 - 1934.136 * t
     omega_rad = omega * DEGREES_TO_RADIANS
 
-    nutation = -0.00569 - 0.00478 * math.sin(omega_rad)
+    nutation = -0.00478 * math.sin(omega_rad)
 
     # Aberration correction
     aberration = -0.00569
