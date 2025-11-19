@@ -1,7 +1,7 @@
 import datetime
-import math
 
 from jpholiday.checker import utils
+from jpholiday.checker import astronomy
 from jpholiday.checker.interface import HolidayCheckerInterface, OriginalHolidayCheckerInterface
 from jpholiday.registry.interface import CheckerRegistryInterface
 
@@ -66,26 +66,21 @@ class VernalEquinoxDayChecker(HolidayCheckerInterface):
     def _vernal_equinox_day(year):
         """
         春季皇霊祭: 1879-1947
-        春分の日: 1948
+        春分の日: 1948-
         春分の日の日付を返します。
-        http://mt-soft.sakura.ne.jp/kyozai/excel_high/200_jissen_kiso/60_syunbun.htm
+
+        Uses astronomical calculations based on the Sun's ecliptic longitude.
+        The spring equinox occurs when the Sun's ecliptic longitude is 0°.
+
+        Accuracy: ±1 day
+        Supported range: 1948-3000+
+        Dependencies: Standard library only
         """
 
-        if year <= 1948:
+        if year < 1948:
             return 0
 
-        if year >= 1851 and year <= 1899:
-            i = 19.8277
-        elif year >= 1900 and year <= 1979:
-            i = 20.8357
-        elif year >= 1980 and year <= 2099:
-            i = 20.8431
-        elif year >= 2100 and year <= 2150:
-            i = 21.8510
-        else:
-            i = 0
-
-        return math.floor(i + 0.242194 * (year - 1980) - math.floor((year - 1980) / 4))
+        return astronomy.calculate_vernal_equinox(year)
 
 
 # みどりの日
@@ -218,27 +213,22 @@ class AutumnEquinoxDayChecker(HolidayCheckerInterface):
     @staticmethod
     def _autumn_equinox_day(year):
         """
-        秋分の日の日付を返します。
         秋季皇霊祭: 1879-1947
-        秋分の日: 1948
-        http://mt-soft.sakura.ne.jp/kyozai/excel_high/200_jissen_kiso/60_syunbun.htm
+        秋分の日: 1948-
+        秋分の日の日付を返します。
+
+        Uses astronomical calculations based on the Sun's ecliptic longitude.
+        The autumn equinox occurs when the Sun's ecliptic longitude is 180°.
+
+        Accuracy: ±1 day
+        Supported range: 1948-3000+
+        Dependencies: Standard library only
         """
 
-        if year <= 1948:
+        if year < 1948:
             return 0
 
-        if year >= 1851 and year <= 1899:
-            i = 22.2588
-        elif year >= 1900 and year <= 1979:
-            i = 23.2588
-        elif year >= 1980 and year <= 2099:
-            i = 23.2488
-        elif year >= 2100 and year <= 2150:
-            i = 24.2488
-        else:
-            i = 0
-
-        return math.floor(i + 0.242194 * (year - 1980) - math.floor((year - 1980) / 4))
+        return astronomy.calculate_autumn_equinox(year)
 
 
 # 体育の日
