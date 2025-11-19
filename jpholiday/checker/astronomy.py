@@ -18,7 +18,6 @@ import datetime
 J2000 = 2451545.0  # Julian Day for epoch J2000.0 (2000-01-01 12:00:00 UTC)
 DAYS_PER_JULIAN_CENTURY = 36525.0
 DEGREES_TO_RADIANS = math.pi / 180.0
-RADIANS_TO_DEGREES = 180.0 / math.pi
 
 
 def julian_day(year: int, month: int, day: int, hour: float = 0.0) -> float:
@@ -189,9 +188,14 @@ def solar_ecliptic_longitude(jd: float) -> float:
 
     # Apparent longitude (includes nutation and aberration)
     # Nutation in longitude
+    # Omega: Mean longitude of ascending node of Moon's orbit
+    # Formula from Meeus: Ω = 125.04° - 1934.136°·T
+    # where T is Julian centuries since J2000.0
     omega = 125.04 - 1934.136 * t
     omega_rad = omega * DEGREES_TO_RADIANS
 
+    # Nutation correction (simplified formula from Meeus)
+    # Coefficient -0.00478° represents amplitude of primary nutation term
     nutation = -0.00478 * math.sin(omega_rad)
 
     # Aberration correction
@@ -342,6 +346,7 @@ def calculate_vernal_equinox(year: int) -> int:
 
     Returns:
         Day of month (typically 19-21)
+        0 if year is before 1948 (calculation not supported)
     """
     if year < 1948:
         return 0
@@ -352,6 +357,13 @@ def calculate_vernal_equinox(year: int) -> int:
     # Convert to Japan Standard Time (UTC+9)
     # Japan observes the equinox date in JST
     jst_time = equinox_time + datetime.timedelta(hours=9)
+
+    # Verify that the month is correct (should always be March for vernal equinox)
+    if jst_time.month != 3:
+        raise ValueError(
+            f"Vernal equinox calculation resulted in unexpected month: "
+            f"{jst_time.month} (expected 3). Year: {year}, Date: {jst_time}"
+        )
 
     return jst_time.day
 
@@ -365,6 +377,7 @@ def calculate_autumn_equinox(year: int) -> int:
 
     Returns:
         Day of month (typically 22-24)
+        0 if year is before 1948 (calculation not supported)
     """
     if year < 1948:
         return 0
@@ -375,5 +388,12 @@ def calculate_autumn_equinox(year: int) -> int:
     # Convert to Japan Standard Time (UTC+9)
     # Japan observes the equinox date in JST
     jst_time = equinox_time + datetime.timedelta(hours=9)
+
+    # Verify that the month is correct (should always be September for autumn equinox)
+    if jst_time.month != 9:
+        raise ValueError(
+            f"Autumn equinox calculation resulted in unexpected month: "
+            f"{jst_time.month} (expected 9). Year: {year}, Date: {jst_time}"
+        )
 
     return jst_time.day
