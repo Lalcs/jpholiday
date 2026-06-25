@@ -1,6 +1,10 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
 [project]
 name = "jpholiday"
-description = "Pure-Python Japan Public Holiday Generate"
+description = "Japanese public holidays, powered by a zero-dependency Rust engine (PyO3)"
 authors = [
     { name = "Vatis", email = "vatis@lalcs.com" }
 ]
@@ -15,13 +19,13 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Rust",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Other/Nonlisted Topic",
     "Natural Language :: Japanese",
@@ -34,26 +38,10 @@ classifiers = [
 "Bug Tracker" = "https://github.com/Lalcs/jpholiday/issues"
 "Repository" = "https://github.com/Lalcs/jpholiday"
 
-
-[build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
-build-backend = "poetry_dynamic_versioning.backend"
-
-[tool.poetry]
-version = "0.0.0"
-
-[tool.poetry.requires-plugins]
-poetry-dynamic-versioning = { version = ">=1.0.0,<2.0.0", extras = ["plugin"] }
-
-[tool.poetry.group.dev.dependencies]
-coverage = "^7.9.2"
-
-[tool.poetry-dynamic-versioning]
-enable = true
-format-jinja = """
-    {%- if distance == 0 -%}
-        {{ serialize_pep440(base, stage, revision) }}
-    {%- else -%}
-        {{ timestamp[:4] }}.{{ timestamp[4:6] }}.{{ timestamp[6:8] }}.{{ timestamp[8:] }}
-    {%- endif -%}
-"""
+[tool.maturin]
+# Python ソースはリポジトリ直下の `jpholiday/` パッケージ。
+python-source = "."
+# 生成する拡張モジュールを `jpholiday._rust` として配置する。
+module-name = "jpholiday._rust"
+# バインディング crate の場所。バージョンはこの crate の `version` を採用する。
+manifest-path = "rust/Cargo.toml"

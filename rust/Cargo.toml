@@ -1,0 +1,21 @@
+[package]
+name = "jpholiday-pyo3"
+version = "1.0.0"
+# 上流の jpholiday クレートが edition 2024 のため、ビルドには Rust 1.85 以降が必要。
+edition = "2021"
+rust-version = "1.85"
+license = "MIT"
+description = "PyO3 bindings exposing the jpholiday crate to Python"
+repository = "https://github.com/Lalcs/jpholiday"
+
+[lib]
+# Python 拡張モジュール (.so/.pyd) を生成する。最終的なモジュール名は
+# pyproject.toml の [tool.maturin] module-name = "jpholiday._rust" で決まる。
+name = "jpholiday_pyo3"
+crate-type = ["cdylib"]
+
+[dependencies]
+# 祝日判定ロジックは上流の純 Rust クレートに完全委譲する（ここでは再実装しない）。
+jpholiday = "0.2"
+# abi3-py310: Python 3.10+ で 1 枚のホイールが使える安定 ABI。
+pyo3 = { version = "0.26", features = ["abi3-py310", "extension-module"] }

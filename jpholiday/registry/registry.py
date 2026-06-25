@@ -1,37 +1,16 @@
-from jpholiday.checker.checker import *
 from jpholiday.checker.interface import HolidayCheckerInterface
 from jpholiday.registry.interface import CheckerRegistryInterface
 
 
 class HolidayCheckerRegistry(CheckerRegistryInterface):
+    """独自チェッカーのみを保持するレジストリ。
+
+    組込み祝日・振替休日・国民の休日は Rust エンジンが計算するため、ここでは利用者が
+    登録した独自チェッカーのみを型単位で重複排除しつつ保持する。
+    """
+
     def __init__(self) -> None:
-        self._checker: list[HolidayCheckerInterface] = [
-            NewYearChecker(),
-            AdultDayChecker(),
-            FoundationDayChecker(),
-            EmperorsBirthdayChecker(),
-            VernalEquinoxDayChecker(),
-            GreeneryDayChecker(),
-            ShowaDayChecker(),
-            ConstitutionMemorialDayChecker(),
-            ChildrensDayChecker(),
-            SeaDayChecker(),
-            MountainDayChecker(),
-            RespectForTheAgedDayChecker(),
-            AutumnEquinoxDayChecker(),
-            HealthAndSportsDayChecker(),
-            SportsDayChecker(),
-            CultureDayChecker(),
-            LaborThanksgivingDayChecker(),
-            ExtraHoliday1959Checker(),
-            ExtraHoliday1989Checker(),
-            ExtraHoliday1990Checker(),
-            ExtraHoliday1993Checker(),
-            ExtraHoliday2019MayChecker(),
-            ExtraHoliday2019OctChecker(),
-            TransferHolidayChecker(self),
-            NationalHolidayChecker(self),
-        ]
+        self._checker: list[HolidayCheckerInterface] = []
 
     def checkers(self) -> list[HolidayCheckerInterface]:
         return self._checker

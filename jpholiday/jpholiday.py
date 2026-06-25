@@ -1,6 +1,7 @@
 import datetime
 from typing import Any, Union, Iterator
 
+from jpholiday import _rust
 from jpholiday.cache.in_memory import HolidayInMemoryCache
 from jpholiday.checker.interface import OriginalHolidayCheckerInterface
 from jpholiday.exception import JPHolidayTypeError
@@ -24,7 +25,13 @@ class JPHoliday:
         if cache is not None:
             return cache
 
-        holidays = []
+        # 組込み祝日（振替休日・国民の休日を含む）は Rust エンジンに委譲する。
+        holidays = [
+            Holiday(date, name)
+            for name in _rust.holidays_on(date.year, date.month, date.day)
+        ]
+
+        # 独自チェッカー（Python 側で管理）をレジストリ順にマージする。
         for holiday in self.registry.checkers():
             if holiday.is_holiday(date):
                 holidays.append(Holiday(date, holiday.holiday_name(date)))

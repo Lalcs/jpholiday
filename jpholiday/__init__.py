@@ -28,9 +28,14 @@ __all__ = [
 2020年 五輪特別措置法改正案
 """
 
-# Version will be dynamically set by poetry-dynamic-versioning
+# インストール済みディストリビューションのメタデータからバージョンを取得する。
 try:
-    from ._version import __version__
+    from importlib.metadata import PackageNotFoundError, version
+
+    try:
+        __version__ = version("jpholiday")
+    except PackageNotFoundError:
+        # ソースツリーから直接実行している場合などのフォールバック。
+        __version__ = "0.0.0"
 except ImportError:
-    # Fallback for development
-    __version__ = '0.0.0'
+    __version__ = "0.0.0"
