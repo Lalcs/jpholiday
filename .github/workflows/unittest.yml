@@ -38,4 +38,6 @@ jobs:
         run: pip install .
 
       - name: Run tests
-        run: python -m unittest discover -v
+        # python-source をサブディレクトリ化したため、リポジトリ直下で実行しても
+        # インストール済み拡張が import される（ソースによる shadowing なし）。
+        run: python -m unittest discover -s tests -t . -v

@@ -39,8 +39,9 @@ classifiers = [
 "Repository" = "https://github.com/Lalcs/jpholiday"
 
 [tool.maturin]
-# Python ソースはリポジトリ直下の `jpholiday/` パッケージ。
-python-source = "."
+# Python ソースは `python/jpholiday/` パッケージ。サブディレクトリに置くことで、リポジトリ直下を
+# cwd にしてもソースの jpholiday がインストール済み拡張を上書き（shadowing）しない。
+python-source = "python"
 # 生成する拡張モジュールを `jpholiday._rust` として配置する。
 module-name = "jpholiday._rust"
 # バインディング crate の場所。バージョンはこの crate の `version` を採用する。
