@@ -6,4 +6,10 @@ dist
 build
 .vscode
 .idea
-.venv
+.venv*
+
+# Rust / maturin build artifacts
+target
+rust/target
+*.so
+*.pyd

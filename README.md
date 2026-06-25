@@ -14,10 +14,25 @@
 **2027年**までの祝日は公式発表された内容に基づいて動作確認済みです。  
 それ以降についても取得は可能ですが、内閣府からの正式な公表がないため、正確性は保証されません。
 
+祝日判定エンジンは [jpholiday-rust](https://github.com/Lalcs/jpholiday-rust) を [PyO3](https://pyo3.rs/)
+でネイティブコンパイルした拡張です。**実行時の追加依存はゼロ**（`import jpholiday` だけで動作）で、
+判定処理はネイティブ速度で実行されます。公開 API はこれまでと完全互換です。
+
 ## Installation
 
 ```bash
 pip install jpholiday
+```
+
+Linux / macOS / Windows 向けにビルド済みホイール（`cp310-abi3`、Python 3.10+ 共通）を配布しているため、
+通常は Rust ツールチェーンなしでインストールできます。
+
+ソースからビルドする場合のみ [Rust ツールチェーン](https://rustup.rs/)（1.85+）が必要です:
+
+```bash
+pip install maturin
+maturin develop --manifest-path rust/Cargo.toml   # 開発用にローカルへインストール
+maturin build --release --manifest-path rust/Cargo.toml  # 配布ホイールを生成
 ```
 
 ## Class

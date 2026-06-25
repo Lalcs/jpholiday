@@ -8,8 +8,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
         python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14' ]
+
+    env:
+      # 新しい Python でも abi3 拡張をビルドできるようにする（abi3 の下限は 3.10）。
+      PYO3_USE_ABI3_FORWARD_COMPATIBILITY: '1'
 
     steps:
       - name: Checkout Repository
@@ -22,27 +26,49 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo build
+        uses: Swatinem/rust-cache@v2
         with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+          workspaces: rust
 
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
-      - name: Install project
-        run: poetry install --no-interaction
+      - name: Build and install (PyO3 native extension)
+        run: pip install .
 
       - name: Run tests
-        run: |
-          poetry run python -m unittest discover -v
+        # python-source をサブディレクトリ化したため、リポジトリ直下で実行しても
+        # インストール済み拡張が import される（ソースによる shadowing なし）。
+        run: python -m unittest discover -s tests -t . -v
 
+  test-alpine:
+    # Alpine (musl libc) でのビルド & テスト。GitHub Actions にネイティブな
+    # FreeBSD/Alpine ランナーは無いため、glibc ホスト上で checkout し、テスト実行のみ
+    # musl の Alpine コンテナ内で行う（actions が glibc node を要求する問題を回避）。
+    name: test (alpine-musl, ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.10', '3.12', '3.13' ]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build & test on Alpine (musl libc)
+        run: |
+          docker run --rm \
+            -e PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1 \
+            -v "$PWD:/io" -w /io \
+            "python:${{ matrix.python-version }}-alpine" sh -c '
+              set -e
+              apk add --no-cache build-base musl-dev curl
+              curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable --profile minimal
+              . "$HOME/.cargo/env"
+              python -m pip install --upgrade pip
+              pip install .
+              python -m unittest discover -s tests -t . -v
+            '

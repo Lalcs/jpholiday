@@ -5,53 +5,126 @@ on:
   release:
     types: [ published ]
 
+permissions:
+  contents: read
+
 jobs:
-  build-and-publish:
+  linux:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ x86_64, aarch64 ]
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+          python-version: '3.12'
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
         with:
-          python-version: '3.13'
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+          target: ${{ matrix.target }}
+          manylinux: auto
+          args: --release --out dist --manifest-path rust/Cargo.toml
+      - uses: actions/upload-artifact@v4
         with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+          name: wheels-linux-${{ matrix.target }}
+          path: dist
 
-      - name: Configure Poetry
-        run: |
-          poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+  musllinux:
+    # Alpine などの musl libc 向けホイール（musllinux_1_2）。
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ x86_64, aarch64 ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build wheels (musllinux)
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          manylinux: musllinux_1_2
+          args: --release --out dist --manifest-path rust/Cargo.toml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-musllinux-${{ matrix.target }}
+          path: dist
 
-      - name: Install dependencies
-        run: poetry install --no-interaction
+  macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ x86_64, aarch64 ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist --manifest-path rust/Cargo.toml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-macos-${{ matrix.target }}
+          path: dist
 
-      - name: Build package
-        run: poetry build
+  windows:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ x64 ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build wheels
+        uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.target }}
+          args: --release --out dist --manifest-path rust/Cargo.toml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-windows-${{ matrix.target }}
+          path: dist
 
-      - name: Verify package
-        run: |
-          echo "Built packages:"
-          ls -la dist/
+  sdist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build sdist
+        uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist --manifest-path rust/Cargo.toml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-sdist
+          path: dist
 
-      - name: Publish to Test PyPI (optional)
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          POETRY_REPOSITORIES_TEST_PYPI_URL: https://test.pypi.org/legacy/
-          POETRY_PYPI_TOKEN_TEST_PYPI: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        run: |
-          poetry config repositories.test-pypi https://test.pypi.org/legacy/
-          poetry config pypi-token.test-pypi ${{ secrets.TEST_PYPI_API_TOKEN }}
-          poetry publish -r test-pypi --skip-existing
-        continue-on-error: true
-
+  release:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    needs: [ linux, musllinux, macos, windows, sdist ]
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          merge-multiple: true
+          path: dist
       - name: Publish to PyPI
-        if: github.event_name == 'release' && github.event.action == 'published'
-        run: poetry publish
+        uses: PyO3/maturin-action@v1
+        env:
+          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        with:
+          command: upload
+          args: --non-interactive --skip-existing dist/*
