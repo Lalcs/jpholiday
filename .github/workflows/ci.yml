@@ -1,0 +1,176 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# 同じブランチ / PR の古い実行はキャンセルする (master は全コミットを検証するためキャンセルしない)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+env:
+  # lint / 型チェック / ビルド / カバレッジのサマリーに使う Python
+  DEFAULT_PYTHON: "3.13"
+
+# 同じリポジトリのブランチからの PR は push で検証済みのため、
+# pull_request イベントでは fork からの PR だけを検証する (各ジョブの if 条件)
+jobs:
+  lint:
+    name: Lint (ruff)
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python and Poetry
+        uses: ./.github/actions/setup-poetry
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          install-args: --only lint
+
+      - name: Run ruff check
+        run: poetry run ruff check --output-format=github
+
+      - name: Run ruff format
+        run: poetry run ruff format --check --diff
+
+  typecheck:
+    name: Type check (mypy)
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python and Poetry
+        uses: ./.github/actions/setup-poetry
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          install-args: --only lint
+
+      - name: Run mypy
+        run: poetry run mypy
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ '3.10', '3.11', '3.12', '3.13', '3.14', '3.15' ]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python and Poetry
+        uses: ./.github/actions/setup-poetry
+        with:
+          python-version: ${{ matrix.python-version }}
+          install-args: --without lint
+
+      - name: Run tests
+        run: poetry run coverage run -m unittest discover -v
+
+      - name: Write coverage summary
+        if: matrix.python-version == env.DEFAULT_PYTHON
+        run: |
+          {
+            echo "## Coverage (Python ${{ matrix.python-version }})"
+            echo
+            poetry run coverage report --format=markdown --fail-under=0
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Generate HTML coverage report
+        if: matrix.python-version == env.DEFAULT_PYTHON
+        run: poetry run coverage html --fail-under=0
+
+      - name: Upload HTML coverage report
+        if: matrix.python-version == env.DEFAULT_PYTHON
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: htmlcov/
+          retention-days: 14
+
+      - name: Check coverage threshold
+        run: poetry run coverage report
+
+  build:
+    name: Build package
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      # pythonpublish.yml と同じ手順でビルドする
+      - name: Build package
+        run: poetry build
+
+      - name: Check package metadata
+        run: |
+          python -m pip install --upgrade twine
+          python -m twine check --strict dist/*
+
+      - name: Check package contents
+        run: |
+          python -m zipfile -l dist/*.whl | grep -q 'jpholiday/py.typed'
+          tar -tzf dist/*.tar.gz | grep -q 'jpholiday/py.typed'
+
+      - name: Test installed packages
+        run: |
+          # ソースツリーの jpholiday を import しないよう、テストはリポジトリ外で実行する
+          cp -r tests "$RUNNER_TEMP/tests"
+          for dist in dist/*.whl dist/*.tar.gz; do
+            echo "::group::Test $dist"
+            venv="$RUNNER_TEMP/venv-$(basename "$dist")"
+            python -m venv "$venv"
+            "$venv/bin/python" -m pip install --quiet packaging "$dist"
+            (
+              cd "$RUNNER_TEMP"
+              "$venv/bin/python" -I -c '
+          import importlib.metadata
+          import jpholiday
+          from packaging.version import Version
+
+          assert "site-packages" in jpholiday.__file__, jpholiday.__file__
+          installed = importlib.metadata.version("jpholiday")
+          print(f"__version__={jpholiday.__version__} metadata={installed}")
+          assert Version(jpholiday.__version__) == Version(installed)
+          '
+              "$venv/bin/python" -m unittest discover -s tests -t .
+            )
+            echo "::endgroup::"
+          done
+
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 14
