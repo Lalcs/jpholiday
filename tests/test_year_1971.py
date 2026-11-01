@@ -15,7 +15,7 @@ class TestYear1971(unittest.TestCase):
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1971, 3, 21)), '春分の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1971, 4, 29)), '天皇誕生日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1971, 5, 3)), '憲法記念日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1971, 5, 4)), '国民の休日')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1971, 5, 4)), None)
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1971, 5, 5)), 'こどもの日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1971, 9, 15)), '敬老の日')
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1971, 9, 24)), '秋分の日')
@@ -31,7 +31,7 @@ class TestYear1971(unittest.TestCase):
         self.assertEqual(len(jpholiday.month_holidays(1971, 2)), 1)
         self.assertEqual(len(jpholiday.month_holidays(1971, 3)), 1)
         self.assertEqual(len(jpholiday.month_holidays(1971, 4)), 1)
-        self.assertEqual(len(jpholiday.month_holidays(1971, 5)), 3)
+        self.assertEqual(len(jpholiday.month_holidays(1971, 5)), 2)
         self.assertEqual(len(jpholiday.month_holidays(1971, 6)), 0)
         self.assertEqual(len(jpholiday.month_holidays(1971, 7)), 0)
         self.assertEqual(len(jpholiday.month_holidays(1971, 8)), 0)
@@ -44,4 +44,4 @@ class TestYear1971(unittest.TestCase):
         """
         1971年祝日数
         """
-        self.assertEqual(len(jpholiday.year_holidays(1971)), 13)
+        self.assertEqual(len(jpholiday.year_holidays(1971)), 12)
