@@ -6,9 +6,9 @@
 [![image](https://img.shields.io/github/contributors/lalcs/jpholiday.svg)](https://github.com/lalcs/jpholiday/graphs/contributors)
 [![image](https://img.shields.io/pypi/dm/jpholiday)](https://pypistats.org/packages/jpholiday)
 [![CI](https://github.com/Lalcs/jpholiday/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Lalcs/jpholiday/actions/workflows/ci.yml)
-[![Rust版](https://img.shields.io/badge/Rust%E7%89%88-jpholiday-000000?logo=rust&logoColor=white)](https://github.com/Lalcs/jpholiday-rust)
+[![Rust](https://img.shields.io/badge/Rust-jpholiday-000000?logo=rust&logoColor=white)](https://github.com/Lalcs/jpholiday-rust)
 
-![image](./docs/images/logo.png)
+![image](https://raw.githubusercontent.com/Lalcs/jpholiday/HEAD/docs/images/logo.png)
 
 このライブラリは、[内閣府](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html)
 が公表しているデータを基に、日本の国民の祝日を簡単に取得できるようにしたものです。  
