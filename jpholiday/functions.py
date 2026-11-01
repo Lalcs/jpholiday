@@ -1,6 +1,7 @@
 import datetime
 
-from jpholiday.jpholiday import JPHoliday, OriginalHolidayCheckerInterface
+from jpholiday.checker.interface import OriginalHolidayCheckerInterface
+from jpholiday.jpholiday import JPHoliday
 
 new_api = JPHoliday()
 

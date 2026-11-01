@@ -11,6 +11,14 @@ from jpholiday.registry.interface import CheckerRegistryInterface
 _HOLIDAY_ACT_ENFORCEMENT_DATE = datetime.date(1948, 7, 20)
 
 
+def _is_nth_weekday(date: datetime.date, week: int, weekday: int) -> bool:
+    """
+    指定日がその月の第 week 週の weekday 曜日(1: 月曜日 〜 7: 日曜日)かどうかを返します。
+    """
+    nth_weekday = utils._week_day(date, week, weekday)
+    return nth_weekday is not None and date.day == nth_weekday.day
+
+
 # 元日
 class NewYearChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
@@ -28,9 +36,7 @@ class AdultDayChecker(HolidayCheckerInterface):
         if date < _HOLIDAY_ACT_ENFORCEMENT_DATE:
             return False
         return (date.year <= 1999 and date.month == 1 and date.day == 15) or (
-            date.year >= 2000
-            and date.month == 1
-            and date.day == utils._week_day(date, 2, 1).day
+            date.year >= 2000 and date.month == 1 and _is_nth_weekday(date, 2, 1)
         )
 
     def holiday_name(self, date: datetime.date) -> str:
@@ -76,7 +82,7 @@ class VernalEquinoxDayChecker(HolidayCheckerInterface):
         return "春分の日"
 
     @staticmethod
-    def _vernal_equinox_day(year):
+    def _vernal_equinox_day(year: int) -> int:
         """
         春季皇霊祭: 1879-1947
         春分の日: 1948-
@@ -152,11 +158,7 @@ class SeaDayChecker(HolidayCheckerInterface):
         return (
             (date.year in range(1996, 2002 + 1) and date.month == 7 and date.day == 20)
             # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
-            or (
-                date.year >= 2003
-                and date.month == 7
-                and date.day == utils._week_day(date, 3, 1).day
-            )
+            or (date.year >= 2003 and date.month == 7 and _is_nth_weekday(date, 3, 1))
         )
 
     def holiday_name(self, date: datetime.date) -> str:
@@ -187,11 +189,7 @@ class RespectForTheAgedDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         return (
             date.year in range(1966, 2002 + 1) and date.month == 9 and date.day == 15
-        ) or (
-            date.year >= 2003
-            and date.month == 9
-            and date.day == utils._week_day(date, 3, 1).day
-        )
+        ) or (date.year >= 2003 and date.month == 9 and _is_nth_weekday(date, 3, 1))
 
     def holiday_name(self, date: datetime.date) -> str:
         return "敬老の日"
@@ -206,7 +204,7 @@ class AutumnEquinoxDayChecker(HolidayCheckerInterface):
         return "秋分の日"
 
     @staticmethod
-    def _autumn_equinox_day(year):
+    def _autumn_equinox_day(year: int) -> int:
         """
         秋季皇霊祭: 1879-1947
         秋分の日: 1948-
@@ -234,7 +232,7 @@ class HealthAndSportsDayChecker(HolidayCheckerInterface):
         ) or (
             date.year in range(2000, 2019 + 1)
             and date.month == 10
-            and date.day == utils._week_day(date, 2, 1).day
+            and _is_nth_weekday(date, 2, 1)
         )
 
     def holiday_name(self, date: datetime.date) -> str:
@@ -254,11 +252,7 @@ class SportsDayChecker(HolidayCheckerInterface):
 
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
         #       国民の祝日に関する法律(昭和23年法律第178号)の特例
-        return (
-            date.year >= 2020
-            and date.month == 10
-            and date.day == utils._week_day(date, 2, 1).day
-        )
+        return date.year >= 2020 and date.month == 10 and _is_nth_weekday(date, 2, 1)
 
     def holiday_name(self, date: datetime.date) -> str:
         return "スポーツの日"
