@@ -80,3 +80,5 @@ branch = true
 fail_under = 95
 precision = 2
 show_missing = true
+# 抽象メソッドの本体は実行されないため集計対象外にする
+exclude_also = ["@(abc\\.)?abstractmethod"]
