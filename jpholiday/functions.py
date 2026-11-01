@@ -46,8 +46,8 @@ def month_holidays(year: int, month: int) -> list[tuple[datetime.date, str]]:
 
 
 def between(
-        start_date: Union[datetime.date, datetime.datetime],
-        end_date: Union[datetime.date, datetime.datetime]
+    start_date: Union[datetime.date, datetime.datetime],
+    end_date: Union[datetime.date, datetime.datetime],
 ) -> list[tuple[datetime.date, str]]:
     """
     指定された期間の祝日日、祝日名を返します。

@@ -86,9 +86,9 @@ class JPHoliday:
             date = date + datetime.timedelta(days=1)
 
     def between(
-            self,
-            start_date: Union[datetime.date, datetime.datetime],
-            end_date: Union[datetime.date, datetime.datetime]
+        self,
+        start_date: Union[datetime.date, datetime.datetime],
+        end_date: Union[datetime.date, datetime.datetime],
     ) -> list[Holiday]:
         """
         指定された期間の祝日日、祝日名をリストで返します。
@@ -96,9 +96,9 @@ class JPHoliday:
         return list(self.iter_between(start_date, end_date))
 
     def iter_between(
-            self,
-            start_date: Union[datetime.date, datetime.datetime],
-            end_date: Union[datetime.date, datetime.datetime]
+        self,
+        start_date: Union[datetime.date, datetime.datetime],
+        end_date: Union[datetime.date, datetime.datetime],
     ) -> Iterator[Holiday]:
         """
         指定された期間の祝日日、祝日名をイテレーターで返します。
