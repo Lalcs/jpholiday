@@ -1,3 +1,4 @@
+import calendar
 import datetime
 from typing import Any, Union, Iterator
 
@@ -20,9 +21,11 @@ class JPHoliday:
 
         date = self._to_date(date)
 
+        # 戻り値はキャッシュ本体とは別のリストにする。
+        # 呼び出し側が戻り値を変更してもキャッシュが壊れないようにするため。
         cache = self._cache.get(date)
         if cache is not None:
-            return cache
+            return list(cache)
 
         holidays = []
         for holiday in self.registry.checkers():
@@ -31,7 +34,7 @@ class JPHoliday:
 
         self._cache.set(date, holidays)
 
-        return holidays
+        return list(holidays)
 
     def is_holiday(self, date: Union[datetime.date, datetime.datetime]) -> bool:
         """
@@ -55,15 +58,7 @@ class JPHoliday:
         """
         指定された年の祝日日、祝日名をイテレーターで返します。
         """
-        date = datetime.date(year, 1, 1)
-
-        while date.year == year:
-            result = self.holidays(date)
-            if result:
-                for holiday in result:
-                    yield holiday
-
-            date = date + datetime.timedelta(days=1)
+        yield from self.iter_between(datetime.date(year, 1, 1), datetime.date(year, 12, 31))
 
     def month_holidays(self, year: int, month: int) -> list[Holiday]:
         """
@@ -75,15 +70,10 @@ class JPHoliday:
         """
         指定された月の祝日日、祝日名をイテレーターで返します。
         """
-        date = datetime.date(year, month, 1)
+        first_date = datetime.date(year, month, 1)
+        last_date = first_date.replace(day=calendar.monthrange(year, month)[1])
 
-        while date.month == month:
-            result = self.holidays(date)
-            if result:
-                for holiday in result:
-                    yield holiday
-
-            date = date + datetime.timedelta(days=1)
+        yield from self.iter_between(first_date, last_date)
 
     def between(
             self,
@@ -103,16 +93,13 @@ class JPHoliday:
         """
         指定された期間の祝日日、祝日名をイテレーターで返します。
         """
-        current_date = self._to_date(start_date)
+        start_date = self._to_date(start_date)
         end_date = self._to_date(end_date)
 
-        while current_date <= end_date:
-            result = self.holidays(current_date)
-            if result:
-                for holiday in result:
-                    yield holiday
-
-            current_date = current_date + datetime.timedelta(days=1)
+        # 日付の通し番号で回すことで、end_date が datetime.date.max の場合でも
+        # 翌日の計算による OverflowError を起こさない
+        for ordinal in range(start_date.toordinal(), end_date.toordinal() + 1):
+            yield from self.holidays(datetime.date.fromordinal(ordinal))
 
     def _to_date(self, value: Any) -> datetime.date:
         """

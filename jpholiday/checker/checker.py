@@ -436,6 +436,10 @@ class NationalHolidayChecker(HolidayCheckerInterface):
         if date.isoweekday() == 7:
             return False
 
+        # 翌日が存在しない日(datetime.date.max)は「前日及び翌日が祝日」になり得ない
+        if date == datetime.date.max:
+            return False
+
         filtered_registry = list(
             filter(
                 lambda x:
