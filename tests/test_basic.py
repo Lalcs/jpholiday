@@ -23,9 +23,7 @@ class TestBasic(unittest.TestCase):
                     2020, 2, 5
                 ):
                     return True
-                if date == datetime.date(2020, 2, 9):
-                    return True
-                return False
+                return date == datetime.date(2020, 2, 9)
 
             def holiday_name(self, date: datetime.date) -> str:
                 return "特別休暇"

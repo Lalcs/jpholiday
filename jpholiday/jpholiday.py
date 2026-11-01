@@ -1,5 +1,6 @@
 import datetime
-from typing import Any, Union, Iterator
+from collections.abc import Iterator
+from typing import Any
 
 from jpholiday.cache.in_memory import HolidayInMemoryCache
 from jpholiday.checker.interface import OriginalHolidayCheckerInterface
@@ -13,7 +14,7 @@ class JPHoliday:
         self._cache = HolidayInMemoryCache()
         self.registry = HolidayCheckerRegistry()
 
-    def holidays(self, date: Union[datetime.date, datetime.datetime]) -> list[Holiday]:
+    def holidays(self, date: datetime.date | datetime.datetime) -> list[Holiday]:
         """
         その日の祝日名を返します。
         """
@@ -33,17 +34,14 @@ class JPHoliday:
 
         return holidays
 
-    def is_holiday(self, date: Union[datetime.date, datetime.datetime]) -> bool:
+    def is_holiday(self, date: datetime.date | datetime.datetime) -> bool:
         """
         その日が祝日かどうかを返します。
         """
 
         date = self._to_date(date)
 
-        if len(self.holidays(date)) != 0:
-            return True
-
-        return False
+        return len(self.holidays(date)) != 0
 
     def year_holidays(self, year: int) -> list[Holiday]:
         """
@@ -60,8 +58,7 @@ class JPHoliday:
         while date.year == year:
             result = self.holidays(date)
             if result:
-                for holiday in result:
-                    yield holiday
+                yield from result
 
             date = date + datetime.timedelta(days=1)
 
@@ -80,15 +77,14 @@ class JPHoliday:
         while date.month == month:
             result = self.holidays(date)
             if result:
-                for holiday in result:
-                    yield holiday
+                yield from result
 
             date = date + datetime.timedelta(days=1)
 
     def between(
         self,
-        start_date: Union[datetime.date, datetime.datetime],
-        end_date: Union[datetime.date, datetime.datetime],
+        start_date: datetime.date | datetime.datetime,
+        end_date: datetime.date | datetime.datetime,
     ) -> list[Holiday]:
         """
         指定された期間の祝日日、祝日名をリストで返します。
@@ -97,8 +93,8 @@ class JPHoliday:
 
     def iter_between(
         self,
-        start_date: Union[datetime.date, datetime.datetime],
-        end_date: Union[datetime.date, datetime.datetime],
+        start_date: datetime.date | datetime.datetime,
+        end_date: datetime.date | datetime.datetime,
     ) -> Iterator[Holiday]:
         """
         指定された期間の祝日日、祝日名をイテレーターで返します。
@@ -109,8 +105,7 @@ class JPHoliday:
         while current_date <= end_date:
             result = self.holidays(current_date)
             if result:
-                for holiday in result:
-                    yield holiday
+                yield from result
 
             current_date = current_date + datetime.timedelta(days=1)
 

@@ -1,13 +1,12 @@
 import datetime
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from jpholiday.model.holiday import Holiday
 
 
 class HolidayCacheInterface(ABC):
     @abstractmethod
-    def get(self, date: datetime.date) -> Optional[list[Holiday]]:
+    def get(self, date: datetime.date) -> list[Holiday] | None:
         pass
 
     @abstractmethod

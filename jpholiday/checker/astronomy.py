@@ -10,9 +10,8 @@ Accuracy: ±1 day for years 1948-3000
 Dependencies: math, datetime (standard library only)
 """
 
-import math
 import datetime
-
+import math
 
 # Constants
 J2000 = 2451545.0  # Julian Day for epoch J2000.0 (2000-01-01 12:00:00 UTC)

@@ -1,7 +1,6 @@
 import datetime
 
-from jpholiday.checker import utils
-from jpholiday.checker import astronomy
+from jpholiday.checker import astronomy, utils
 from jpholiday.checker.interface import (
     HolidayCheckerInterface,
     OriginalHolidayCheckerInterface,
@@ -28,15 +27,11 @@ class AdultDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         if date < _HOLIDAY_ACT_ENFORCEMENT_DATE:
             return False
-        if date.year <= 1999 and date.month == 1 and date.day == 15:
-            return True
-        elif (
+        return (date.year <= 1999 and date.month == 1 and date.day == 15) or (
             date.year >= 2000
             and date.month == 1
             and date.day == utils._week_day(date, 2, 1).day
-        ):
-            return True
-        return False
+        )
 
     def holiday_name(self, date: datetime.date) -> str:
         return "成人の日"
@@ -56,13 +51,15 @@ class EmperorsBirthdayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         if date < _HOLIDAY_ACT_ENFORCEMENT_DATE:
             return False
-        if date.year in range(1948, 1988 + 1) and date.month == 4 and date.day == 29:
-            return True
-        elif date.year in range(1989, 2018 + 1) and date.month == 12 and date.day == 23:
-            return True
-        elif date.year >= 2020 and date.month == 2 and date.day == 23:
-            return True
-        return False
+        return (
+            (date.year in range(1948, 1988 + 1) and date.month == 4 and date.day == 29)
+            or (
+                date.year in range(1989, 2018 + 1)
+                and date.month == 12
+                and date.day == 23
+            )
+            or (date.year >= 2020 and date.month == 2 and date.day == 23)
+        )
 
     def holiday_name(self, date: datetime.date) -> str:
         return "天皇誕生日"
@@ -73,9 +70,7 @@ class VernalEquinoxDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         if date < _HOLIDAY_ACT_ENFORCEMENT_DATE:
             return False
-        if date.month == 3 and date.day == self._vernal_equinox_day(date.year):
-            return True
-        return False
+        return date.month == 3 and date.day == self._vernal_equinox_day(date.year)
 
     def holiday_name(self, date: datetime.date) -> str:
         return "春分の日"
@@ -104,11 +99,9 @@ class VernalEquinoxDayChecker(HolidayCheckerInterface):
 # みどりの日
 class GreeneryDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
-        if date.year in range(1989, 2006 + 1) and date.month == 4 and date.day == 29:
-            return True
-        elif date.year >= 2007 and date.month == 5 and date.day == 4:
-            return True
-        return False
+        return (
+            date.year in range(1989, 2006 + 1) and date.month == 4 and date.day == 29
+        ) or (date.year >= 2007 and date.month == 5 and date.day == 4)
 
     def holiday_name(self, date: datetime.date) -> str:
         return "みどりの日"
@@ -117,9 +110,7 @@ class GreeneryDayChecker(HolidayCheckerInterface):
 # 昭和の日
 class ShowaDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
-        if date.year >= 2007 and date.month == 4 and date.day == 29:
-            return True
-        return False
+        return date.year >= 2007 and date.month == 4 and date.day == 29
 
     def holiday_name(self, date: datetime.date) -> str:
         return "昭和の日"
@@ -130,9 +121,7 @@ class ConstitutionMemorialDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         if date < _HOLIDAY_ACT_ENFORCEMENT_DATE:
             return False
-        if date.month == 5 and date.day == 3:
-            return True
-        return False
+        return date.month == 5 and date.day == 3
 
     def holiday_name(self, date: datetime.date) -> str:
         return "憲法記念日"
@@ -143,9 +132,7 @@ class ChildrensDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         if date < _HOLIDAY_ACT_ENFORCEMENT_DATE:
             return False
-        if date.month == 5 and date.day == 5:
-            return True
-        return False
+        return date.month == 5 and date.day == 5
 
     def holiday_name(self, date: datetime.date) -> str:
         return "こどもの日"
@@ -156,29 +143,21 @@ class SeaDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
         if date.year == 2020:
-            if date == datetime.date(2020, 7, 23):
-                return True
-
-            return False
+            return date == datetime.date(2020, 7, 23)
 
         # 2021: 五輪特別措置法改正案
         if date.year == 2021:
-            if date == datetime.date(2021, 7, 22):
-                return True
+            return date == datetime.date(2021, 7, 22)
 
-            return False
-
-        if date.year in range(1996, 2002 + 1) and date.month == 7 and date.day == 20:
-            return True
-        # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
-        elif (
-            date.year >= 2003
-            and date.month == 7
-            and date.day == utils._week_day(date, 3, 1).day
-        ):
-            return True
-
-        return False
+        return (
+            (date.year in range(1996, 2002 + 1) and date.month == 7 and date.day == 20)
+            # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
+            or (
+                date.year >= 2003
+                and date.month == 7
+                and date.day == utils._week_day(date, 3, 1).day
+            )
+        )
 
     def holiday_name(self, date: datetime.date) -> str:
         return "海の日"
@@ -189,24 +168,15 @@ class MountainDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
         if date.year == 2020:
-            if date == datetime.date(2020, 8, 10):
-                return True
-
-            return False
+            return date == datetime.date(2020, 8, 10)
 
         # 2021: 五輪特別措置法改正案
         if date.year == 2021:
-            if date == datetime.date(2021, 8, 8):
-                return True
-
-            return False
+            return date == datetime.date(2021, 8, 8)
 
         # 2016: 国民の祝日に関する法律の一部を改正する法律(平成26年法律第43号)
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
-        if date.year >= 2016 and date.month == 8 and date.day == 11:
-            return True
-
-        return False
+        return date.year >= 2016 and date.month == 8 and date.day == 11
 
     def holiday_name(self, date: datetime.date) -> str:
         return "山の日"
@@ -215,15 +185,13 @@ class MountainDayChecker(HolidayCheckerInterface):
 # 敬老の日
 class RespectForTheAgedDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
-        if date.year in range(1966, 2002 + 1) and date.month == 9 and date.day == 15:
-            return True
-        elif (
+        return (
+            date.year in range(1966, 2002 + 1) and date.month == 9 and date.day == 15
+        ) or (
             date.year >= 2003
             and date.month == 9
             and date.day == utils._week_day(date, 3, 1).day
-        ):
-            return True
-        return False
+        )
 
     def holiday_name(self, date: datetime.date) -> str:
         return "敬老の日"
@@ -232,9 +200,7 @@ class RespectForTheAgedDayChecker(HolidayCheckerInterface):
 # 秋分の日
 class AutumnEquinoxDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
-        if date.month == 9 and date.day == self._autumn_equinox_day(date.year):
-            return True
-        return False
+        return date.month == 9 and date.day == self._autumn_equinox_day(date.year)
 
     def holiday_name(self, date: datetime.date) -> str:
         return "秋分の日"
@@ -263,15 +229,13 @@ class AutumnEquinoxDayChecker(HolidayCheckerInterface):
 # 体育の日
 class HealthAndSportsDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
-        if date.year in range(1966, 1999 + 1) and date.month == 10 and date.day == 10:
-            return True
-        elif (
+        return (
+            date.year in range(1966, 1999 + 1) and date.month == 10 and date.day == 10
+        ) or (
             date.year in range(2000, 2019 + 1)
             and date.month == 10
             and date.day == utils._week_day(date, 2, 1).day
-        ):
-            return True
-        return False
+        )
 
     def holiday_name(self, date: datetime.date) -> str:
         return "体育の日"
@@ -282,28 +246,19 @@ class SportsDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         # 2020: 国民の祝日に関する法律(昭和23年法律第178号)の特例
         if date.year == 2020:
-            if date == datetime.date(2020, 7, 24):
-                return True
-
-            return False
+            return date == datetime.date(2020, 7, 24)
 
         # 2021: 五輪特別措置法改正案
         if date.year == 2021:
-            if date == datetime.date(2021, 7, 23):
-                return True
-
-            return False
+            return date == datetime.date(2021, 7, 23)
 
         # 2020: 国民の祝日に関する法律の一部を改正する法律(平成30年法律第57号)
         #       国民の祝日に関する法律(昭和23年法律第178号)の特例
-        if (
+        return (
             date.year >= 2020
             and date.month == 10
             and date.day == utils._week_day(date, 2, 1).day
-        ):
-            return True
-
-        return False
+        )
 
     def holiday_name(self, date: datetime.date) -> str:
         return "スポーツの日"
@@ -314,9 +269,7 @@ class CultureDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         if date < _HOLIDAY_ACT_ENFORCEMENT_DATE:
             return False
-        if date.month == 11 and date.day == 3:
-            return True
-        return False
+        return date.month == 11 and date.day == 3
 
     def holiday_name(self, date: datetime.date) -> str:
         return "文化の日"
@@ -327,9 +280,7 @@ class LaborThanksgivingDayChecker(HolidayCheckerInterface):
     def is_holiday(self, date: datetime.date) -> bool:
         if date < _HOLIDAY_ACT_ENFORCEMENT_DATE:
             return False
-        if date.month == 11 and date.day == 23:
-            return True
-        return False
+        return date.month == 11 and date.day == 23
 
     def holiday_name(self, date: datetime.date) -> str:
         return "勤労感謝の日"
@@ -395,9 +346,7 @@ class TransferHolidayChecker(HolidayCheckerInterface):
         self._registry = registry
 
     def is_holiday(self, date: datetime.date) -> bool:
-        if self.__transfer_holiday_name(date) == "":
-            return False
-        return True
+        return self.__transfer_holiday_name(date) != ""
 
     def holiday_name(self, date: datetime.date) -> str:
         return self.__transfer_holiday_name(date)
@@ -472,7 +421,7 @@ class NationalHolidayChecker(HolidayCheckerInterface):
         if len(list(filter(lambda x: x.is_holiday(date), filtered_registry))) != 0:
             return False
 
-        if (
+        return (
             len(
                 list(
                     filter(
@@ -491,10 +440,7 @@ class NationalHolidayChecker(HolidayCheckerInterface):
                 )
             )
             != 0
-        ):
-            return True
-
-        return False
+        )
 
     def holiday_name(self, date: datetime.date) -> str:
         return "国民の休日"

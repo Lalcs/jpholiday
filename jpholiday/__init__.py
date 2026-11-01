@@ -2,7 +2,7 @@ from .checker.interface import OriginalHolidayCheckerInterface
 from .functions import *
 from .jpholiday import JPHoliday
 
-__all__ = [
+__all__ = [  # noqa: RUF022 -- 種類ごとに分類して並べているため
     # クラス
     "JPHoliday",
     "OriginalHolidayCheckerInterface",
