@@ -15,7 +15,7 @@ runs:
   steps:
     - name: Set up Python ${{ inputs.python-version }}
       id: setup-python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ inputs.python-version }}
 
@@ -28,7 +28,7 @@ runs:
     # パッチバージョンが上がると venv が壊れるため、実際のバージョンをキーに含める
     - name: Load cached venv
       id: cached-poetry-dependencies
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: .venv
         key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ inputs.install-args }}-${{ hashFiles('**/poetry.lock') }}
