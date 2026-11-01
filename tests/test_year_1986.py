@@ -9,19 +9,44 @@ class TestYear1986(unittest.TestCase):
         """
         1986年祝日
         """
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 1, 1)), '元日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 1, 15)), '成人の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 2, 11)), '建国記念の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 3, 21)), '春分の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 4, 29)), '天皇誕生日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 5, 3)), '憲法記念日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 5, 5)), 'こどもの日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 9, 15)), '敬老の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 9, 23)), '秋分の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 10, 10)), '体育の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 11, 3)), '文化の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 11, 23)), '勤労感謝の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 11, 24)), '勤労感謝の日 振替休日')
+        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1986, 1, 1)), "元日")
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 1, 15)), "成人の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 2, 11)), "建国記念の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 3, 21)), "春分の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 4, 29)), "天皇誕生日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 5, 3)), "憲法記念日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 5, 5)), "こどもの日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 9, 15)), "敬老の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 9, 23)), "秋分の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 10, 10)), "体育の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 11, 3)), "文化の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 11, 23)), "勤労感謝の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1986, 11, 24)),
+            "勤労感謝の日 振替休日",
+        )
 
     def test_count_month(self):
         """

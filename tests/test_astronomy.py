@@ -85,9 +85,9 @@ class TestAstronomicalCalculations(unittest.TestCase):
         """Test solar ecliptic longitude for approximate equinox/solstice dates."""
         test_cases = [
             # (year, month, day, expected_longitude, tolerance)
-            (2000, 3, 20, 0.0, 5.0),     # Spring equinox ~0°
-            (2000, 6, 21, 90.0, 5.0),    # Summer solstice ~90°
-            (2000, 9, 22, 180.0, 5.0),   # Autumn equinox ~180°
+            (2000, 3, 20, 0.0, 5.0),  # Spring equinox ~0°
+            (2000, 6, 21, 90.0, 5.0),  # Summer solstice ~90°
+            (2000, 9, 22, 180.0, 5.0),  # Autumn equinox ~180°
             (2000, 12, 21, 270.0, 5.0),  # Winter solstice ~270°
         ]
 
@@ -101,8 +101,11 @@ class TestAstronomicalCalculations(unittest.TestCase):
                 if diff > 180:
                     diff = 360 - diff
 
-                self.assertLess(diff, tolerance,
-                               f"Longitude {lon}° not within {tolerance}° of {expected_lon}°")
+                self.assertLess(
+                    diff,
+                    tolerance,
+                    f"Longitude {lon}° not within {tolerance}° of {expected_lon}°",
+                )
 
     def test_vernal_equinox_historical_dates(self):
         """Test vernal equinox dates against historical records."""
@@ -120,8 +123,11 @@ class TestAstronomicalCalculations(unittest.TestCase):
         for year, expected_day in known_equinoxes:
             with self.subTest(year=year):
                 day = astronomy.calculate_vernal_equinox(year)
-                self.assertEqual(day, expected_day,
-                               f"Vernal equinox for {year} should be March {expected_day}, got {day}")
+                self.assertEqual(
+                    day,
+                    expected_day,
+                    f"Vernal equinox for {year} should be March {expected_day}, got {day}",
+                )
 
     def test_autumn_equinox_historical_dates(self):
         """Test autumn equinox dates against historical records."""
@@ -139,8 +145,11 @@ class TestAstronomicalCalculations(unittest.TestCase):
         for year, expected_day in known_equinoxes:
             with self.subTest(year=year):
                 day = astronomy.calculate_autumn_equinox(year)
-                self.assertEqual(day, expected_day,
-                               f"Autumn equinox for {year} should be September {expected_day}, got {day}")
+                self.assertEqual(
+                    day,
+                    expected_day,
+                    f"Autumn equinox for {year} should be September {expected_day}, got {day}",
+                )
 
     def test_vernal_equinox_extended_range(self):
         """Test vernal equinox calculations for extended year range."""
@@ -151,8 +160,12 @@ class TestAstronomicalCalculations(unittest.TestCase):
             with self.subTest(year=year):
                 day = astronomy.calculate_vernal_equinox(year)
                 # Vernal equinox should be between March 19-21
-                self.assertGreaterEqual(day, 19, f"Vernal equinox {day} too early for {year}")
-                self.assertLessEqual(day, 21, f"Vernal equinox {day} too late for {year}")
+                self.assertGreaterEqual(
+                    day, 19, f"Vernal equinox {day} too early for {year}"
+                )
+                self.assertLessEqual(
+                    day, 21, f"Vernal equinox {day} too late for {year}"
+                )
 
     def test_autumn_equinox_extended_range(self):
         """Test autumn equinox calculations for extended year range."""
@@ -163,8 +176,12 @@ class TestAstronomicalCalculations(unittest.TestCase):
             with self.subTest(year=year):
                 day = astronomy.calculate_autumn_equinox(year)
                 # Autumn equinox should be between September 21-24
-                self.assertGreaterEqual(day, 21, f"Autumn equinox {day} too early for {year}")
-                self.assertLessEqual(day, 24, f"Autumn equinox {day} too late for {year}")
+                self.assertGreaterEqual(
+                    day, 21, f"Autumn equinox {day} too early for {year}"
+                )
+                self.assertLessEqual(
+                    day, 24, f"Autumn equinox {day} too late for {year}"
+                )
 
     def test_vernal_equinox_before_1948(self):
         """Test that vernal equinox returns 0 for years before 1948."""
@@ -192,8 +209,11 @@ class TestAstronomicalCalculations(unittest.TestCase):
         end_time = time.perf_counter()
 
         avg_time_ms = (end_time - start_time) * 1000 / iterations
-        self.assertLess(avg_time_ms, 1.0,
-                       f"Average calculation time {avg_time_ms:.3f}ms exceeds 1ms requirement")
+        self.assertLess(
+            avg_time_ms,
+            1.0,
+            f"Average calculation time {avg_time_ms:.3f}ms exceeds 1ms requirement",
+        )
 
     def test_performance_autumn_equinox(self):
         """Test that autumn equinox calculation meets performance requirements."""
@@ -207,8 +227,11 @@ class TestAstronomicalCalculations(unittest.TestCase):
         end_time = time.perf_counter()
 
         avg_time_ms = (end_time - start_time) * 1000 / iterations
-        self.assertLess(avg_time_ms, 1.0,
-                       f"Average calculation time {avg_time_ms:.3f}ms exceeds 1ms requirement")
+        self.assertLess(
+            avg_time_ms,
+            1.0,
+            f"Average calculation time {avg_time_ms:.3f}ms exceeds 1ms requirement",
+        )
 
     def test_consistency_across_years(self):
         """Test that equinox calculations are consistent across consecutive years."""
@@ -220,8 +243,11 @@ class TestAstronomicalCalculations(unittest.TestCase):
 
                 # The difference should be at most 2 days (accounting for leap years)
                 diff = abs(day2 - day1)
-                self.assertLessEqual(diff, 2,
-                                   f"Vernal equinox dates differ by {diff} days between {year} and {year+1}")
+                self.assertLessEqual(
+                    diff,
+                    2,
+                    f"Vernal equinox dates differ by {diff} days between {year} and {year + 1}",
+                )
 
     def test_solar_anomaly(self):
         """Test solar mean anomaly calculation."""
@@ -241,40 +267,94 @@ class TestAstronomicalCalculations(unittest.TestCase):
         """Test vernal equinox for complete range 2000-2030."""
         # Known values from National Astronomical Observatory of Japan
         expected_dates = {
-            2000: 20, 2001: 20, 2002: 21, 2003: 21, 2004: 20,
-            2005: 20, 2006: 21, 2007: 21, 2008: 20, 2009: 20,
-            2010: 21, 2011: 21, 2012: 20, 2013: 20, 2014: 21,
-            2015: 21, 2016: 20, 2017: 20, 2018: 21, 2019: 21,
-            2020: 20, 2021: 20, 2022: 21, 2023: 21, 2024: 20,
-            2025: 20, 2026: 20, 2027: 21, 2028: 20, 2029: 20,
+            2000: 20,
+            2001: 20,
+            2002: 21,
+            2003: 21,
+            2004: 20,
+            2005: 20,
+            2006: 21,
+            2007: 21,
+            2008: 20,
+            2009: 20,
+            2010: 21,
+            2011: 21,
+            2012: 20,
+            2013: 20,
+            2014: 21,
+            2015: 21,
+            2016: 20,
+            2017: 20,
+            2018: 21,
+            2019: 21,
+            2020: 20,
+            2021: 20,
+            2022: 21,
+            2023: 21,
+            2024: 20,
+            2025: 20,
+            2026: 20,
+            2027: 21,
+            2028: 20,
+            2029: 20,
             2030: 20,
         }
 
         for year, expected_day in expected_dates.items():
             with self.subTest(year=year):
                 day = astronomy.calculate_vernal_equinox(year)
-                self.assertEqual(day, expected_day,
-                               f"Vernal equinox for {year} should be March {expected_day}, got {day}")
+                self.assertEqual(
+                    day,
+                    expected_day,
+                    f"Vernal equinox for {year} should be March {expected_day}, got {day}",
+                )
 
     def test_autumn_equinox_complete_range_2000_2030(self):
         """Test autumn equinox for complete range 2000-2030."""
         # Known values from National Astronomical Observatory of Japan
         expected_dates = {
-            2000: 23, 2001: 23, 2002: 23, 2003: 23, 2004: 23,
-            2005: 23, 2006: 23, 2007: 23, 2008: 23, 2009: 23,
-            2010: 23, 2011: 23, 2012: 22, 2013: 23, 2014: 23,
-            2015: 23, 2016: 22, 2017: 23, 2018: 23, 2019: 23,
-            2020: 22, 2021: 23, 2022: 23, 2023: 23, 2024: 22,
-            2025: 23, 2026: 23, 2027: 23, 2028: 22, 2029: 23,
+            2000: 23,
+            2001: 23,
+            2002: 23,
+            2003: 23,
+            2004: 23,
+            2005: 23,
+            2006: 23,
+            2007: 23,
+            2008: 23,
+            2009: 23,
+            2010: 23,
+            2011: 23,
+            2012: 22,
+            2013: 23,
+            2014: 23,
+            2015: 23,
+            2016: 22,
+            2017: 23,
+            2018: 23,
+            2019: 23,
+            2020: 22,
+            2021: 23,
+            2022: 23,
+            2023: 23,
+            2024: 22,
+            2025: 23,
+            2026: 23,
+            2027: 23,
+            2028: 22,
+            2029: 23,
             2030: 23,
         }
 
         for year, expected_day in expected_dates.items():
             with self.subTest(year=year):
                 day = astronomy.calculate_autumn_equinox(year)
-                self.assertEqual(day, expected_day,
-                               f"Autumn equinox for {year} should be September {expected_day}, got {day}")
+                self.assertEqual(
+                    day,
+                    expected_day,
+                    f"Autumn equinox for {year} should be September {expected_day}, got {day}",
+                )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

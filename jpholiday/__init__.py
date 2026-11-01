@@ -2,7 +2,7 @@ from .checker.interface import OriginalHolidayCheckerInterface
 from .functions import *
 from .jpholiday import JPHoliday
 
-__all__ = [
+__all__ = [  # noqa: RUF022 -- 種類ごとに分類して並べているため
     # クラス
     "JPHoliday",
     "OriginalHolidayCheckerInterface",
@@ -28,9 +28,6 @@ __all__ = [
 2020年 五輪特別措置法改正案
 """
 
-# Version will be dynamically set by poetry-dynamic-versioning
-try:
-    from ._version import __version__
-except ImportError:
-    # Fallback for development
-    __version__ = '0.0.0'
+# __version__.py はビルド時に poetry-dynamic-versioning が実際のバージョンへ置換する
+# (ソースツリー上では "0.0.0" のまま)
+from .__version__ import __version__

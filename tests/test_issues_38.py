@@ -6,7 +6,6 @@ import jpholiday
 
 
 class TestIssues38(unittest.TestCase):
-
     def test_main(self):
         """
         calendar.setfirstweekday による祝日判定の不具合

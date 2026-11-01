@@ -7,3 +7,8 @@ build
 .vscode
 .idea
 .venv
+.coverage
+.coverage.*
+.mypy_cache
+.ruff_cache
+htmlcov

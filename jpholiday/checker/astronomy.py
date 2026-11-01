@@ -10,9 +10,8 @@ Accuracy: ±1 day for years 1948-3000
 Dependencies: math, datetime (standard library only)
 """
 
-import math
 import datetime
-
+import math
 
 # Constants
 J2000 = 2451545.0  # Julian Day for epoch J2000.0 (2000-01-01 12:00:00 UTC)
@@ -43,9 +42,14 @@ def julian_day(year: int, month: int, day: int, hour: float = 0.0) -> float:
     a = year // 100
     b = 2 - a + (a // 4)
 
-    jd = math.floor(365.25 * (year + 4716)) + \
-         math.floor(30.6001 * (month + 1)) + \
-         day + hour / 24.0 + b - 1524.5
+    jd = (
+        math.floor(365.25 * (year + 4716))
+        + math.floor(30.6001 * (month + 1))
+        + day
+        + hour / 24.0
+        + b
+        - 1524.5
+    )
 
     return jd
 
@@ -93,9 +97,9 @@ def solar_mean_longitude(t: float) -> float:
     """
     # L0 = mean longitude at epoch
     # Formula: L0 = 280.4665 + 36000.7698*T
-    l0 = 280.4664567 + 36000.76982779 * t + \
-         0.0003032028 * t * t + \
-         t * t * t / 49931000.0
+    l0 = (
+        280.4664567 + 36000.76982779 * t + 0.0003032028 * t * t + t * t * t / 49931000.0
+    )
 
     return normalize_angle(l0)
 
@@ -125,9 +129,7 @@ def solar_anomaly(t: float) -> float:
         Mean anomaly in degrees
     """
     # M = mean anomaly of the Sun
-    m = 357.52910 + 35999.05030 * t - \
-        0.0001559 * t * t - \
-        0.00000048 * t * t * t
+    m = 357.52910 + 35999.05030 * t - 0.0001559 * t * t - 0.00000048 * t * t * t
 
     return normalize_angle(m)
 
@@ -146,9 +148,11 @@ def equation_of_center(t: float) -> float:
     m_rad = m * DEGREES_TO_RADIANS
 
     # Equation of center with multiple terms for higher accuracy
-    c = (1.914600 - 0.004817 * t - 0.000014 * t * t) * math.sin(m_rad) + \
-        (0.019993 - 0.000101 * t) * math.sin(2 * m_rad) + \
-        0.000290 * math.sin(3 * m_rad)
+    c = (
+        (1.914600 - 0.004817 * t - 0.000014 * t * t) * math.sin(m_rad)
+        + (0.019993 - 0.000101 * t) * math.sin(2 * m_rad)
+        + 0.000290 * math.sin(3 * m_rad)
+    )
 
     return c
 
@@ -232,8 +236,9 @@ def solar_ecliptic_longitude_rate(jd: float, dt: float = 0.0001) -> float:
     return diff / dt
 
 
-def find_equinox_solstice(year: int, target_longitude: float,
-                          initial_month: int, initial_day: int) -> datetime.datetime:
+def find_equinox_solstice(
+    year: int, target_longitude: float, initial_month: int, initial_day: int
+) -> datetime.datetime:
     """
     Find the exact moment when the Sun reaches a specific ecliptic longitude.
 

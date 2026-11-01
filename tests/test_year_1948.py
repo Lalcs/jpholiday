@@ -16,9 +16,15 @@ class TestYear1948(unittest.TestCase):
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1948, 5, 3)), None)
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1948, 5, 4)), None)
         self.assertEqual(jpholiday.is_holiday_name(datetime.date(1948, 5, 5)), None)
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1948, 9, 23)), '秋分の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1948, 11, 3)), '文化の日')
-        self.assertEqual(jpholiday.is_holiday_name(datetime.date(1948, 11, 23)), '勤労感謝の日')
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1948, 9, 23)), "秋分の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1948, 11, 3)), "文化の日"
+        )
+        self.assertEqual(
+            jpholiday.is_holiday_name(datetime.date(1948, 11, 23)), "勤労感謝の日"
+        )
 
     def test_count_month(self):
         """

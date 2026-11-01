@@ -47,7 +47,11 @@ version = "0.0.0"
 poetry-dynamic-versioning = { version = ">=1.0.0,<2.0.0", extras = ["plugin"] }
 
 [tool.poetry.group.dev.dependencies]
-coverage = "^7.9.2"
+coverage = {version = "^7.16.2", extras = ["toml"]}
+
+[tool.poetry.group.lint.dependencies]
+ruff = "^0.17.3"
+mypy = "^2.4.1"
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -58,3 +62,23 @@ format-jinja = """
         {{ timestamp[:4] }}.{{ timestamp[4:6] }}.{{ timestamp[6:8] }}.{{ timestamp[8:] }}
     {%- endif -%}
 """
+
+[tool.ruff]
+# ルールは ruff の既定セットを使う (target-version は requires-python から推論)
+line-length = 88
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["jpholiday"]
+
+[tool.coverage.run]
+source = ["jpholiday"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 95
+precision = 2
+show_missing = true
+# 抽象メソッドの本体は実行されないため集計対象外にする
+exclude_also = ["@(abc\\.)?abstractmethod"]

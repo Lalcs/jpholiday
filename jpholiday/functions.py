@@ -1,12 +1,12 @@
 import datetime
-from typing import Optional, Union
 
-from jpholiday.jpholiday import JPHoliday, OriginalHolidayCheckerInterface
+from jpholiday.checker.interface import OriginalHolidayCheckerInterface
+from jpholiday.jpholiday import JPHoliday
 
 new_api = JPHoliday()
 
 
-def is_holiday_name(date: Union[datetime.date, datetime.datetime]) -> Optional[str]:
+def is_holiday_name(date: datetime.date | datetime.datetime) -> str | None:
     """
     その日の祝日名を返します。
     """
@@ -19,7 +19,7 @@ def is_holiday_name(date: Union[datetime.date, datetime.datetime]) -> Optional[s
     return result[0].name
 
 
-def is_holiday(date: Union[datetime.date, datetime.datetime]) -> bool:
+def is_holiday(date: datetime.date | datetime.datetime) -> bool:
     """
     その日が祝日かどうかを返します。
     """
@@ -46,8 +46,8 @@ def month_holidays(year: int, month: int) -> list[tuple[datetime.date, str]]:
 
 
 def between(
-        start_date: Union[datetime.date, datetime.datetime],
-        end_date: Union[datetime.date, datetime.datetime]
+    start_date: datetime.date | datetime.datetime,
+    end_date: datetime.date | datetime.datetime,
 ) -> list[tuple[datetime.date, str]]:
     """
     指定された期間の祝日日、祝日名を返します。

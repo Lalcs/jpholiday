@@ -22,28 +22,39 @@ class TestBoundary(unittest.TestCase):
 
     def test_year_holidays_max(self):
         holidays = jpholiday.year_holidays(9999)
-        self.assertIn((datetime.date(9999, 1, 1), '元日'), holidays)
-        self.assertIn((datetime.date(9999, 11, 23), '勤労感謝の日'), holidays)
-        self.assertEqual(holidays, [it.to_tuple() for it in JPHoliday().year_holidays(9999)])
+        self.assertIn((datetime.date(9999, 1, 1), "元日"), holidays)
+        self.assertIn((datetime.date(9999, 11, 23), "勤労感謝の日"), holidays)
+        self.assertEqual(
+            holidays, [it.to_tuple() for it in JPHoliday().year_holidays(9999)]
+        )
 
     def test_year_holidays_min(self):
         self.assertEqual(jpholiday.year_holidays(1), [])
 
     def test_month_holidays_max(self):
-        self.assertEqual(jpholiday.month_holidays(9999, 11), [
-            (datetime.date(9999, 11, 3), '文化の日'),
-            (datetime.date(9999, 11, 23), '勤労感謝の日'),
-        ])
+        self.assertEqual(
+            jpholiday.month_holidays(9999, 11),
+            [
+                (datetime.date(9999, 11, 3), "文化の日"),
+                (datetime.date(9999, 11, 23), "勤労感謝の日"),
+            ],
+        )
         self.assertEqual(jpholiday.month_holidays(9999, 12), [])
 
     def test_month_holidays_min(self):
         self.assertEqual(jpholiday.month_holidays(1, 1), [])
 
     def test_between_max(self):
-        self.assertEqual(jpholiday.between(datetime.date(9999, 12, 1), datetime.date.max), [])
-        self.assertEqual(jpholiday.between(datetime.datetime(9999, 12, 1), datetime.datetime.max), [])
+        self.assertEqual(
+            jpholiday.between(datetime.date(9999, 12, 1), datetime.date.max), []
+        )
+        self.assertEqual(
+            jpholiday.between(datetime.datetime(9999, 12, 1), datetime.datetime.max), []
+        )
         self.assertEqual(jpholiday.between(datetime.date.max, datetime.date.max), [])
 
     def test_between_min(self):
-        self.assertEqual(jpholiday.between(datetime.date.min, datetime.date(1, 1, 31)), [])
+        self.assertEqual(
+            jpholiday.between(datetime.date.min, datetime.date(1, 1, 31)), []
+        )
         self.assertEqual(jpholiday.between(datetime.date.min, datetime.date.min), [])

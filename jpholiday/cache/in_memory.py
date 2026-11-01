@@ -1,5 +1,4 @@
 import datetime
-from typing import Optional
 
 from jpholiday.cache.interface import HolidayCacheInterface
 from jpholiday.model.holiday import Holiday
@@ -9,7 +8,7 @@ class HolidayInMemoryCache(HolidayCacheInterface):
     def __init__(self) -> None:
         self._cache: dict[datetime.date, list[Holiday]] = {}
 
-    def get(self, date: datetime.date) -> Optional[list[Holiday]]:
+    def get(self, date: datetime.date) -> list[Holiday] | None:
         return self._cache.get(date, None)
 
     def set(self, date: datetime.date, holidays: list[Holiday]) -> None:
