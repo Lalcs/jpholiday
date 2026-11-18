@@ -50,7 +50,7 @@ poetry-dynamic-versioning = { version = ">=1.0.0,<2.0.0", extras = ["plugin"] }
 coverage = {version = "^7.16.2", extras = ["toml"]}
 
 [tool.poetry.group.lint.dependencies]
-ruff = "^0.17.3"
+ruff = "^0.17.4"
 mypy = "^2.4.1"
 
 [tool.poetry-dynamic-versioning]
